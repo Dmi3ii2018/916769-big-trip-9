@@ -1,7 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Дмитрий Алексеев](https://up.htmlacademy.ru/ecmascript/9/user/916769).
-* Наставник: [Ruslan Malogulko].
+* Наставник: [Ruslan Malogulko](https://htmlacademy.ru/profile/id9728).
 
 ---
 
