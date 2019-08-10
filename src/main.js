@@ -5,11 +5,11 @@ import {createEventEditorTemplate} from "../src/components/edit-form.js";
 import {createSortTemplate} from "../src/components/sort.js";
 import {createTripinfoTemplate} from "../src/components/trip-info.js";
 
-const renderElement = function (className, place, creatingFunction, count = 1) {
+const renderElement = function (className, place, createdContent, count = 1) {
   for (let i = 0; i < count; i++) {
     let menuContainer = document.querySelector(className);
 
-    menuContainer.insertAdjacentHTML(place, creatingFunction);
+    menuContainer.insertAdjacentHTML(place, createdContent);
   }
 };
 
