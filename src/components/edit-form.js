@@ -1,5 +1,6 @@
-export const createEvent = ({tripType, activity, tripTypeImage, cityNames, cityImages, description, date, price, options}) => {
+export const createEventEditor = ({tripType, tripTypeImage, cityNames, cityImages, description, date, price, options}) => {
   return `
+  <li class="trip-events__item">
     <form class="event  event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -15,37 +16,37 @@ export const createEvent = ({tripType, activity, tripTypeImage, cityNames, cityI
 
             <div class="event__type-item">
               <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-              <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">${tripType}</label>
+              <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">${tripType[Math.floor(Math.random() * 6)]}</label>
             </div>
 
             <div class="event__type-item">
               <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-              <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">${tripType}</label>
+              <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">${tripType[Math.floor(Math.random() * 6)]}</label>
             </div>
 
             <div class="event__type-item">
               <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-              <label class="event__type-label  event__type-label--train" for="event-type-train-1">${tripType}</label>
+              <label class="event__type-label  event__type-label--train" for="event-type-train-1">${tripType[Math.floor(Math.random() * 6)]}</label>
             </div>
 
             <div class="event__type-item">
               <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-              <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">${tripType}</label>
+              <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">${tripType[Math.floor(Math.random() * 6)]}</label>
             </div>
 
             <div class="event__type-item">
               <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-              <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">${tripType}</label>
+              <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">${tripType[Math.floor(Math.random() * 6)]}</label>
             </div>
 
             <div class="event__type-item">
               <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-              <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">${tripType}</label>
+              <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">${tripType[Math.floor(Math.random() * 6)]}</label>
             </div>
 
             <div class="event__type-item">
               <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-              <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">${tripType}</label>
+              <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">${tripType[Math.floor(Math.random() * 6)]}</label>
             </div>
           </fieldset>
 
@@ -54,17 +55,17 @@ export const createEvent = ({tripType, activity, tripTypeImage, cityNames, cityI
 
             <div class="event__type-item">
               <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-              <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">${activity}</label>
+            <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">${tripType[Math.floor(Math.random() * 6)]}</label>
             </div>
 
             <div class="event__type-item">
               <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-              <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">${activity}</label>
+              <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">${tripType[Math.floor(Math.random() * 6)]}</label>
             </div>
 
             <div class="event__type-item">
               <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-              <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">${activity}</label>
+              <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">${tripType[Math.floor(Math.random() * 6)]}</label>
             </div>
           </fieldset>
         </div>
@@ -86,12 +87,12 @@ export const createEvent = ({tripType, activity, tripTypeImage, cityNames, cityI
         <label class="visually-hidden" for="event-start-time-1">
           From
         </label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${date.start}>
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${new Date(date.start).toDateString()}>
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${date.end}>
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${new Date(date.end).toDateString()}>
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -134,7 +135,7 @@ export const createEvent = ({tripType, activity, tripTypeImage, cityNames, cityI
           </div>
 
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" ${options.choosen ? `checked` : ``}>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" ${options.choosen ? `` : `checked`}>
             <label class="event__offer-label" for="event-offer-comfort-1">
               <span class="event__offer-title">${options.name}</span>
               &plus;
@@ -151,15 +152,16 @@ export const createEvent = ({tripType, activity, tripTypeImage, cityNames, cityI
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
-            <img class="event__photo" src=${cityImages} alt="Event photo">
-            <img class="event__photo" src=${cityImages} alt="Event photo">
-            <img class="event__photo" src=${cityImages} alt="Event photo">
-            <img class="event__photo" src=${cityImages} alt="Event photo">
-            <img class="event__photo" src=${cityImages} alt="Event photo">
+            <img class="event__photo" src=${cityImages[Math.floor(Math.random() * 4)]} alt="Event photo">
+            <img class="event__photo" src=${cityImages[Math.floor(Math.random() * 4)]} alt="Event photo">
+            <img class="event__photo" src=${cityImages[Math.floor(Math.random() * 4)]} alt="Event photo">
+            <img class="event__photo" src=${cityImages[Math.floor(Math.random() * 4)]} alt="Event photo">
+            <img class="event__photo" src=${cityImages[Math.floor(Math.random() * 4)]} alt="Event photo">
           </div>
         </div>
       </section>
     </section>
   </form>
+  </li>
   `;
 };

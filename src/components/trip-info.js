@@ -1,9 +1,17 @@
-export const createTripinfoTemplate = () => {
+export const createTripinfoTemplate = ({cities, dateStart, dateEnd, cost}) => {
   return `
-    <div class="trip-info__main">
-      <h1 class="trip-info__title">Amsterdam &mdash; ... &mdash; Amsterdam</h1>
+    <section class="trip-main__trip-info  trip-info">
+      <div class="trip-info__main">
+        <h1 class="trip-info__title">${cities}</h1>
 
-      <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;21</p>
-    </div>
+        <p class="trip-info__dates">${new Date(dateStart).toDateString()}&nbsp;—&nbsp;${new Date(dateEnd).toDateString()}</p>
+      </div>
+
+      <p class="trip-info__cost">
+        Total: €&nbsp;<span class="trip-info__cost-value">${cost}</span>
+      </p>
+    </section>
   `;
 };
+
+

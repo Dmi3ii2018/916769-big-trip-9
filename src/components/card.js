@@ -1,7 +1,3 @@
-
-
-
-
 export const createCardTemplate = () => {
   return `
     <li class="trip-days__item  day">
