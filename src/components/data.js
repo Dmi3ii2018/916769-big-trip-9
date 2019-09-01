@@ -5,7 +5,7 @@ export const createRoutePoint = () => ({
   tripType: [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`][Math.floor(Math.random() * 7)],
   activity: [`Check`, `Sightseeng`, `Restaurant`],
   tripTypeImage: `img/icons/${tripTypes[Math.floor(Math.random() * 7)]}.png`,
-  cityName: [`Moscow`, `London`, `Paris`, `Oslo`, `Berlin`, `Madrid`, `Riga`, `Rome`][Math.floor(Math.random() * 8)],
+  cityName: [`Moscow`, `London`, `Paris`, `Oslo`, `Berlin`, `Madrid`, `Riga`, `Rome`],
   cityImages: [
     `https://picsum.photos/300/150?r=${Math.random()}`,
     `https://picsum.photos/300/150?r=${Math.random()}`,
@@ -61,7 +61,7 @@ export const createRouteInfo = () => ({
     return mainCost + additionalCost;
   },
   get cities() {
-    let citiesList = eventsList.map((it) => it.cityName);
+    let citiesList = eventsList.map((it) => it.cityName[Math.floor(Math.random() * 8)]);
     let firstCity = citiesList[0];
     let lastCity = citiesList[citiesList.length - 1];
     const destinationCities = [firstCity, lastCity].join(` — ... — `);

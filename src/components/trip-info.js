@@ -13,5 +13,3 @@ export const createTripinfoTemplate = ({cities, dateStart, dateEnd, cost}) => {
     </section>
   `;
 };
-
-

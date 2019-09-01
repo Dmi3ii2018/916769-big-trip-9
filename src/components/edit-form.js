@@ -1,4 +1,4 @@
-export const createEventEditor = ({tripType, tripTypeImage, cityNames, cityImages, description, date, price, options}) => {
+export const createEventEditor = ({tripType, tripTypeImage, cityName, cityImages, description, date, price, options}) => {
   return `
   <li class="trip-events__item">
     <form class="event  event--edit" action="#" method="post">
@@ -75,11 +75,9 @@ export const createEventEditor = ({tripType, tripTypeImage, cityNames, cityImage
         <label class="event__label  event__type-output" for="event-destination-1">
           Sightseeing at
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${cityNames} list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${cityName} list="destination-list-1">
         <datalist id="destination-list-1">
-          <option value=${cityNames}></option>
-          <option value=${cityNames}></option>
-          <option value=${cityNames}></option>
+          ${cityName.map(({city}) => `<option value=${city}></option>`).join(``)}
         </datalist>
       </div>
 
@@ -152,11 +150,7 @@ export const createEventEditor = ({tripType, tripTypeImage, cityNames, cityImage
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
-            <img class="event__photo" src=${cityImages[Math.floor(Math.random() * 4)]} alt="Event photo">
-            <img class="event__photo" src=${cityImages[Math.floor(Math.random() * 4)]} alt="Event photo">
-            <img class="event__photo" src=${cityImages[Math.floor(Math.random() * 4)]} alt="Event photo">
-            <img class="event__photo" src=${cityImages[Math.floor(Math.random() * 4)]} alt="Event photo">
-            <img class="event__photo" src=${cityImages[Math.floor(Math.random() * 4)]} alt="Event photo">
+          ${cityImages.map((it) => `<img class="event__photo" src=${it} alt="Event photo">`).join(``)}
           </div>
         </div>
       </section>

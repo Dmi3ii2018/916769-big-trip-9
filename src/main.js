@@ -1,7 +1,6 @@
 import {createMenuTemplate} from "../src/components/menu.js";
 import {createFilterTemplate} from "../src/components/filter.js";
 import {createTripDayTemplate} from "../src/components/trip-day-item.js";
-// import {createCardTemplate} from "../src/components/card.js";
 import {createEventEditor} from "../src/components/edit-form.js";
 import {createTripEvent} from "../src/components/trip-event.js";
 import {createSortTemplate} from "../src/components/sort.js";
@@ -20,7 +19,7 @@ const renderElement = (className, place, dataStructure, template, count = 1) => 
 
 const renderEventPoint = (className, place, dataStructure, template) => {
   let menuContainer = document.querySelector(className);
-  let eventData = dataStructure.map((it, i) => i === 0 ? `` : template(it));
+  let eventData = dataStructure.map(((it, i) => i === 0 ? `` : template(it))).join(``);
   menuContainer.insertAdjacentHTML(place, eventData);
 };
 
