@@ -41,37 +41,37 @@ export class EditForm {
 
               <div class="event__type-item">
                 <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">${this._tripType[Math.floor(Math.random() * 6)]}</label>
+                <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">${this._tripType[Math.floor(Math.random() * 7)]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">${this._tripType[Math.floor(Math.random() * 6)]}</label>
+                <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">${this._tripType[Math.floor(Math.random() * 7)]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                <label class="event__type-label  event__type-label--train" for="event-type-train-1">${this._tripType[Math.floor(Math.random() * 6)]}</label>
+                <label class="event__type-label  event__type-label--train" for="event-type-train-1">${this._tripType[Math.floor(Math.random() * 7)]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">${this._tripType[Math.floor(Math.random() * 6)]}</label>
+                <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">${this._tripType[Math.floor(Math.random() * 7)]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-                <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">${this._tripType[Math.floor(Math.random() * 6)]}</label>
+                <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">${this._tripType[Math.floor(Math.random() * 7)]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">${this._tripType[Math.floor(Math.random() * 6)]}</label>
+                <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">${this._tripType[Math.floor(Math.random() * 7)]}</label>
               </div>
 
               <div class="event__type-item">
                 <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-                <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">${this._tripType[Math.floor(Math.random() * 6)]}</label>
+                <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">${this._tripType[Math.floor(Math.random() * 7)]}</label>
               </div>
             </fieldset>
 

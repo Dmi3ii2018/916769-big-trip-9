@@ -27,7 +27,7 @@ export class TripEvent {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src=${this._tripTypeImage} alt="Event type icon">
         </div>
-        <h3 class="event__title">${this._tripType}</h3>
+        <h3 class="event__title">${this._tripType[Math.floor(Math.random() * 7)]}</h3>
 
         <div class="event__schedule">
           <p class="event__time">

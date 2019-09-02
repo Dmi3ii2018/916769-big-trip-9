@@ -46,8 +46,10 @@ const renderTripEvent = (tripEventData) => {
 
   const onEscKeyDown = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {
-      tripEventContainer.replaceChild(tripEvent.getElement(), editForm.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
+      if (editForm.getElement().parentNode === tripEventContainer) {
+        tripEventContainer.replaceChild(tripEvent.getElement(), editForm.getElement());
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
     }
   };
 
@@ -55,6 +57,12 @@ const renderTripEvent = (tripEventData) => {
     .addEventListener(`click`, () => {
       tripEventContainer.replaceChild(editForm.getElement(), tripEvent.getElement());
       document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  editForm.getElement().querySelector(`.event__rollup-btn`)
+    .addEventListener(`click`, () => {
+      tripEventContainer.replaceChild(tripEvent.getElement(), editForm.getElement());
+      document.removeEventListener(`keydown`, onEscKeyDown);
     });
 
   editForm.getElement().querySelector(`.event--edit`)
