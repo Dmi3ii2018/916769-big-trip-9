@@ -44,7 +44,7 @@ export const eventsList = new Array(EVENTS_NUMBER).fill(``).map(createRoutePoint
 
 export const createMenu = () => ({
   menuItem: [`Table`, `Stats`],
-  active: [`trip-tabs__btn--active`, ``],
+  active: Boolean(Math.round(Math.random())),
 });
 
 export const createFilter = () => ({
