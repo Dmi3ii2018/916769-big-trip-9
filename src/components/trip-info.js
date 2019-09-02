@@ -1,15 +1,37 @@
-export const createTripinfoTemplate = ({cities, dateStart, dateEnd, cost}) => {
-  return `
-    <section class="trip-main__trip-info  trip-info">
-      <div class="trip-info__main">
-        <h1 class="trip-info__title">${cities}</h1>
+import {createElement} from "../utils.js";
 
-        <p class="trip-info__dates">${new Date(dateStart).toDateString()}&nbsp;—&nbsp;${new Date(dateEnd).toDateString()}</p>
-      </div>
+export class TripInfo {
+  constructor({cities, dateStart, dateEnd, cost}) {
+    this._cities = cities;
+    this._dateStart = dateStart;
+    this._dateEnd = dateEnd;
+    this._cost = cost;
+    this.element = null;
+  }
 
-      <p class="trip-info__cost">
-        Total: €&nbsp;<span class="trip-info__cost-value">${cost}</span>
-      </p>
-    </section>
-  `;
-};
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return `<section class="trip-main__trip-info  trip-info">
+    <div class="trip-info__main">
+      <h1 class="trip-info__title">${this._cities}</h1>
+
+      <p class="trip-info__dates">${new Date(this._dateStart).toDateString()}&nbsp;—&nbsp;${new Date(this._dateEnd).toDateString()}</p>
+    </div>
+
+    <p class="trip-info__cost">
+      Total: €&nbsp;<span class="trip-info__cost-value">${this._cost}</span>
+    </p>
+  </section>`;
+  }
+}
+

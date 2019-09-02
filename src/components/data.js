@@ -2,7 +2,7 @@ const EVENTS_NUMBER = 4;
 const tripTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
 
 export const createRoutePoint = () => ({
-  tripType: [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`][Math.floor(Math.random() * 7)],
+  tripType: [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`],
   activity: [`Check`, `Sightseeng`, `Restaurant`],
   tripTypeImage: `img/icons/${tripTypes[Math.floor(Math.random() * 7)]}.png`,
   cityName: [`Moscow`, `London`, `Paris`, `Oslo`, `Berlin`, `Madrid`, `Riga`, `Rome`],
@@ -44,7 +44,7 @@ export const eventsList = new Array(EVENTS_NUMBER).fill(``).map(createRoutePoint
 
 export const createMenu = () => ({
   menuItem: [`Table`, `Stats`],
-  active: [`trip-tabs__btn--active`, ``],
+  active: Boolean(Math.round(Math.random())),
 });
 
 export const createFilter = () => ({
