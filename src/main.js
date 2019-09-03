@@ -1,6 +1,6 @@
 import {Menu} from "../src/components/menu.js";
 import {Filter} from "../src/components/filter.js";
-import {NewEvent} from "../src/components/new-event.js"
+import {NewEvent} from "../src/components/new-event.js";
 import {TripDay} from "../src/components/trip-day-item.js";
 import {EditForm} from "../src/components/edit-form.js";
 import {TripEvent} from "../src/components/trip-event.js";
