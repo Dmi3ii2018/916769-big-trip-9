@@ -1,5 +1,6 @@
 import {Menu} from "../src/components/menu.js";
 import {Filter} from "../src/components/filter.js";
+import {NewEvent} from "../src/components/new-event.js";
 import {TripDay} from "../src/components/trip-day-item.js";
 import {EditForm} from "../src/components/edit-form.js";
 import {TripEvent} from "../src/components/trip-event.js";
@@ -75,10 +76,18 @@ const renderTripEvent = (tripEventData) => {
   render(tripEventContainer, tripEvent.getElement(), Position.BEFOREEND);
 };
 
+const checkEventPresent = (newEventData) => {
+  if (eventsList.length === 0) {
+    const newEvent = new NewEvent(newEventData);
+    render(tripDayContainer, newEvent.getElement(), Position.AFTERBEGIN);
+  } else {
+    renderSort(createSort());
+    renderTripDay(createRoutePoint());
+    eventsList.map((event) => renderTripEvent(event));
+  }
+};
+
 renderTripInfo(createRouteInfo());
 renderMenu(createMenu());
 renderFilter(createFilter());
-renderSort(createSort());
-renderTripDay(createRoutePoint());
-eventsList.map((event) => renderTripEvent(event));
-
+checkEventPresent(createRoutePoint());

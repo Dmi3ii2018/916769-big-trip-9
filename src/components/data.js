@@ -1,4 +1,4 @@
-const EVENTS_NUMBER = 4;
+const EVENTS_NUMBER = 0;
 const tripTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
 
 export const createRoutePoint = () => ({
@@ -52,26 +52,37 @@ export const createFilter = () => ({
   checked: Boolean(Math.round(Math.random())),
 });
 
-export const createRouteInfo = () => ({
-  dateStart: eventsList[0].date.start,
-  dateEnd: eventsList[eventsList.length - 1].date.end,
-  get cost() {
-    let mainCost = eventsList.map((it) => it.price).reduce((previousValue, currentValue) => previousValue + currentValue);
-    let additionalCost = eventsList.map((it) => it.options.price).reduce((previousValue, currentValue) => previousValue + currentValue);
-    return mainCost + additionalCost;
-  },
-  get cities() {
-    let citiesList = eventsList.map((it) => it.cityName[Math.floor(Math.random() * 8)]);
-    let firstCity = citiesList[0];
-    let lastCity = citiesList[citiesList.length - 1];
-    const destinationCities = [firstCity, lastCity].join(` — ... — `);
+export function createRouteInfo() {
+  if (eventsList.length !== 0) {
+    return {
+      dateStart: eventsList[0].date.start,
+      dateEnd: eventsList[eventsList.length - 1].date.end,
+      get cost() {
+        let mainCost = eventsList.map((it) => it.price).reduce((previousValue, currentValue) => previousValue + currentValue);
+        let additionalCost = eventsList.map((it) => it.options.price).reduce((previousValue, currentValue) => previousValue + currentValue);
+        return mainCost + additionalCost;
+      },
 
-    if (citiesList.length <= 3) {
-      return citiesList.join(` — `);
-    }
-    return destinationCities;
-  },
-});
+      get cities() {
+        let citiesList = eventsList.map((it) => it.cityName[Math.floor(Math.random() * 8)]);
+        let firstCity = citiesList[0];
+        let lastCity = citiesList[citiesList.length - 1];
+        const destinationCities = [firstCity, lastCity].join(` — ... — `);
+
+        if (citiesList.length <= 3) {
+          return citiesList.join(` — `);
+        }
+        return destinationCities;
+      },
+    };
+  }
+  return {
+    dateStart: null,
+    dateEnd: null,
+    cost: 0,
+    cities: ``,
+  };
+}
 
 export const createSort = () => ({
   sortItem: [`EVENT`, `TIME`, `PRICE`, `OFFERS`],

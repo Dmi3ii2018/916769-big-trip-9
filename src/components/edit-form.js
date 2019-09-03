@@ -118,7 +118,7 @@ export class EditForm {
           <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${new Date(this._date.end).toDateString()}>
         </div>
 
-        <div class="event__field-group  event__field-group--this._price">
+        <div class="event__field-group  event__field-group--price">
           <label class="event__label" for="event-price-1">
             <span class="visually-hidden">Price</span>
             &euro;
