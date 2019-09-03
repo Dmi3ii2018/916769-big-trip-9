@@ -25,7 +25,11 @@ export class TripInfo {
     <div class="trip-info__main">
       <h1 class="trip-info__title">${this._cities}</h1>
 
-      <p class="trip-info__dates">${new Date(this._dateStart).toDateString()}&nbsp;—&nbsp;${new Date(this._dateEnd).toDateString()}</p>
+      <p class="trip-info__dates">
+        ${this._dateStart ? new Date(this._dateStart).toDateString() : ``}
+        ${this._dateStart ? `&nbsp;—&nbsp` : ``}
+        ${this._dateEnd ? new Date(this._dateEnd).toDateString() : ``}
+      </p>
     </div>
 
     <p class="trip-info__cost">
