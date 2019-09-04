@@ -1,23 +1,12 @@
-import {createElement} from "../utils.js";
+import {AbstractComponent} from "./abstract-component.js";
 
-export class TripInfo {
+export class TripInfo extends AbstractComponent {
   constructor({cities, dateStart, dateEnd, cost}) {
+    super();
     this._cities = cities;
     this._dateStart = dateStart;
     this._dateEnd = dateEnd;
     this._cost = cost;
-    this.element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   getTemplate() {

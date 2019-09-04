@@ -1,25 +1,14 @@
-import {createElement} from "../utils.js";
+import {AbstractComponent} from "./abstract-component.js";
 
-export class NewEvent {
+export class NewEvent extends AbstractComponent {
   constructor({tripType, tripTypeImage, cityName, cityImages, description, date}) {
+    super();
     this._tripType = tripType;
     this._tripTypeImage = tripTypeImage;
     this._cityName = cityName;
     this._cityImages = cityImages;
     this._description = description;
     this._date = date;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   getTemplate() {

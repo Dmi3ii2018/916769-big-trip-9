@@ -1,7 +1,8 @@
-import {createElement} from "../utils.js";
+import {AbstractComponent} from "./abstract-component.js";
 
-export class EditForm {
+export class EditForm extends AbstractComponent {
   constructor({tripType, tripTypeImage, cityName, cityImages, description, date, price, options}) {
+    super();
     this._tripType = tripType;
     this._tripTypeImage = tripTypeImage;
     this._cityName = cityName;
@@ -10,18 +11,6 @@ export class EditForm {
     this._date = date;
     this._price = price;
     this._options = options;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   getTemplate() {
