@@ -1,10 +1,8 @@
 import {Menu} from "../src/components/menu.js";
 import {Filter} from "../src/components/filter.js";
 import {NewEvent} from "../src/components/new-event.js";
-import {TripDay} from "../src/components/trip-day-item.js";
-import {EditForm} from "../src/components/edit-form.js";
-import {TripEvent} from "../src/components/trip-event.js";
 import {Sort} from "../src/components/sort.js";
+import {TripController} from "../src/controllers/trip-controller.js";
 import {TripInfo} from "../src/components/trip-info.js";
 import {createRoutePoint, eventsList, createMenu, createFilter, createRouteInfo, createSort} from "../src/components/data.js";
 import {render, Position} from "../src/utils.js";
@@ -35,59 +33,19 @@ const renderSort = (sortData) => {
   render(sortContainer, sort.getElement(), Position.AFTERBEGIN);
 };
 
-const renderTripDay = (tripDayInfo) => {
-  const tripDay = new TripDay(tripDayInfo);
-  render(tripDayContainer, tripDay.getElement(), Position.BEFOREEND);
-};
-
-const renderTripEvent = (tripEventData) => {
-  const tripEventContainer = document.querySelector(`.trip-events__list`);
-  const tripEvent = new TripEvent(tripEventData);
-  const editForm = new EditForm(tripEventData);
-
-  const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      if (editForm.getElement().parentNode === tripEventContainer) {
-        tripEventContainer.replaceChild(tripEvent.getElement(), editForm.getElement());
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    }
-  };
-
-  tripEvent.getElement().querySelector(`.event__rollup-btn`)
-    .addEventListener(`click`, () => {
-      tripEventContainer.replaceChild(editForm.getElement(), tripEvent.getElement());
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-  editForm.getElement().querySelector(`.event__rollup-btn`)
-    .addEventListener(`click`, () => {
-      tripEventContainer.replaceChild(tripEvent.getElement(), editForm.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-  editForm.getElement().querySelector(`.event--edit`)
-    .addEventListener(`submit`, (evt) => {
-      evt.preventDefault();
-      tripEventContainer.replaceChild(tripEvent.getElement(), editForm.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-  render(tripEventContainer, tripEvent.getElement(), Position.BEFOREEND);
-};
-
-const checkEventPresent = (newEventData) => {
+const checkEventPresent = (newEventData, events) => {
   if (eventsList.length === 0) {
     const newEvent = new NewEvent(newEventData);
     render(tripDayContainer, newEvent.getElement(), Position.AFTERBEGIN);
   } else {
+    const taskContainer = document.querySelector(`.trip-events`);
+    const tripController = new TripController(taskContainer, events);
     renderSort(createSort());
-    renderTripDay(createRoutePoint());
-    eventsList.map((event) => renderTripEvent(event));
+    tripController.init();
   }
 };
 
 renderTripInfo(createRouteInfo());
 renderMenu(createMenu());
 renderFilter(createFilter());
-checkEventPresent(createRoutePoint());
+checkEventPresent(createRoutePoint(), eventsList);

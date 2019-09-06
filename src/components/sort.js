@@ -1,21 +1,10 @@
-import {createElement} from "../utils.js";
+import {AbstractComponent} from "./abstract-component.js";
 
-export class Sort {
+export class Sort extends AbstractComponent {
   constructor({sortItem, checked}) {
+    super();
     this._sortItem = sortItem;
     this._checked = checked;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   getTemplate() {

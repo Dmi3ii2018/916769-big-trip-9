@@ -1,4 +1,4 @@
-const EVENTS_NUMBER = 0;
+const EVENTS_NUMBER = 4;
 const tripTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
 
 export const createRoutePoint = () => ({
