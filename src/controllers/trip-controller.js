@@ -29,6 +29,7 @@ export class TripController {
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
+
         if (editForm.getElement().parentNode === tripEventContainer) {
           tripEventContainer.replaceChild(tripEvent.getElement(), editForm.getElement());
           document.removeEventListener(`keydown`, onEscKeyDown);
