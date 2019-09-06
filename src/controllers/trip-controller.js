@@ -3,23 +3,35 @@ import {TripDay} from "../components/trip-day.js";
 import {DayEventsList} from "../components/day-events-list.js";
 import {TripEvent} from "../components/trip-event";
 import {EditForm} from "../components/edit-form";
+import {Sort} from "../components/sort.js";
+import {NewEvent} from "../components/new-event.js";
 import {render, Position} from "../utils.js";
+import {createRoutePoint} from "../components/data.js";
 
 export class TripController {
   constructor(container, events) {
     this._container = container;
     this._events = events;
     this._tripDaysList = new TripDaysList();
-    this._tripDay = new TripDay(events[0]);
     this._dayEventsList = new DayEventsList();
+    this._sort = new Sort();
   }
 
   init() {
-    render(this._container, this._tripDaysList.getElement(), Position.BEFOREEND);
-    render(this._tripDaysList.getElement(), this._tripDay.getElement(), Position.BEFOREEND);
-    render(this._tripDay.getElement(), this._dayEventsList.getElement(), Position.BEFOREEND);
+    if (this._events.length === 0) {
+      const newEvent = new NewEvent(createRoutePoint());
+      render(this._container, newEvent.getElement(), Position.AFTERBEGIN);
+    } else {
+      const tripDay = new TripDay(this._events[0]);
+      render(this._container, this._sort.getElement(), Position.BEFOREEND);
+      render(this._container, this._tripDaysList.getElement(), Position.BEFOREEND);
+      render(this._tripDaysList.getElement(), tripDay.getElement(), Position.BEFOREEND);
+      render(tripDay.getElement(), this._dayEventsList.getElement(), Position.BEFOREEND);
 
-    this._events.forEach((event) => this._renderTripEvent(event));
+      this._events.forEach((event) => this._renderTripEvent(event));
+
+      this._sort.getElement().addEventListener(`change`, (evt) => this._onSortChange(evt));
+    }
   }
 
   _renderTripEvent(tripEventData) {
@@ -56,5 +68,32 @@ export class TripController {
       });
 
     render(tripEventContainer, tripEvent.getElement(), Position.BEFOREEND);
+  }
+
+  _onSortChange(evt) {
+    evt.preventDefault();
+
+    if (evt.target.tagName !== `INPUT`) {
+      return;
+    }
+
+    this._dayEventsList.getElement().innerHTML = ``;
+
+    switch (evt.target.dataset.sortType) {
+      case `time-up`: {
+        const sortedByTimeUp = this._events.slice().sort((a, b) => b.date.start - a.date.start);
+        sortedByTimeUp.forEach((eventMock) => this._renderTripEvent(eventMock));
+        break;
+      }
+      case `price-up`: {
+        const sortedByPrice = this._events.slice().sort((a, b) => a.price - b.price);
+        sortedByPrice.forEach((eventMock) => this._renderTripEvent(eventMock));
+        break;
+      }
+      case `default`: {
+        this._events.forEach((eventMock) => this._renderTripEvent(eventMock));
+        break;
+      }
+    }
   }
 }
