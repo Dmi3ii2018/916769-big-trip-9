@@ -77,14 +77,11 @@ export class TripController {
     if (evt.target.tagName !== `INPUT`) {
       return;
     }
-    console.log(evt.target);
-    console.log(evt.target.tagName);
-    console.log(evt.target.dataset);
+
     this._dayEventsList.getElement().innerHTML = ``;
 
     switch (evt.target.dataset.sortType) {
       case `time-up`: {
-        console.log(evt.target);
         const sortedByTimeUp = this._events.slice().sort((a, b) => b.date.start - a.date.start);
         sortedByTimeUp.forEach((eventMock) => this._renderTripEvent(eventMock));
         break;
