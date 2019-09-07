@@ -1,9 +1,6 @@
 import {AbstractComponent} from "./abstract-component.js";
 
 export class Sort extends AbstractComponent {
-  constructor() {
-    super();
-  }
 
   getTemplate() {
     return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
