@@ -80,24 +80,6 @@ export class TripController {
 
     this._dayEventsList.getElement().innerHTML = ``;
 
-<<<<<<< HEAD
-    switch (evt.target.dataset.sortType) {
-      case `time-up`: {
-        const sortedByTimeUp = this._events.slice().sort((a, b) => b.date.start - a.date.start);
-        sortedByTimeUp.forEach((eventMock) => this._renderTripEvent(eventMock));
-        break;
-      }
-      case `price-up`: {
-        const sortedByPrice = this._events.slice().sort((a, b) => a.price - b.price);
-        sortedByPrice.forEach((eventMock) => this._renderTripEvent(eventMock));
-        break;
-      }
-      case `default`: {
-        this._events.forEach((eventMock) => this._renderTripEvent(eventMock));
-        break;
-      }
-    }
-=======
     let eventData;
 
     switch (evt.target.dataset.sortType) {
@@ -116,6 +98,5 @@ export class TripController {
     }
 
     eventData.forEach((eventMock) => this._renderTripEvent(eventMock));
->>>>>>> 964b72197babe6af57cbd9cfa20dc11460861754
   }
 }
