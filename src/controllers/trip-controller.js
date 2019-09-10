@@ -41,6 +41,7 @@ export class TripController {
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
+
         if (editForm.getElement().parentNode === tripEventContainer) {
           tripEventContainer.replaceChild(tripEvent.getElement(), editForm.getElement());
           document.removeEventListener(`keydown`, onEscKeyDown);
@@ -79,6 +80,7 @@ export class TripController {
 
     this._dayEventsList.getElement().innerHTML = ``;
 
+<<<<<<< HEAD
     switch (evt.target.dataset.sortType) {
       case `time-up`: {
         const sortedByTimeUp = this._events.slice().sort((a, b) => b.date.start - a.date.start);
@@ -95,5 +97,25 @@ export class TripController {
         break;
       }
     }
+=======
+    let eventData;
+
+    switch (evt.target.dataset.sortType) {
+      case `time-up`: {
+        eventData = this._events.slice().sort((a, b) => b.date.start - a.date.start);
+        break;
+      }
+      case `price-up`: {
+        eventData = this._events.slice().sort((a, b) => a.price - b.price);
+        break;
+      }
+      case `default`: {
+        eventData = this._events;
+        break;
+      }
+    }
+
+    eventData.forEach((eventMock) => this._renderTripEvent(eventMock));
+>>>>>>> 964b72197babe6af57cbd9cfa20dc11460861754
   }
 }
