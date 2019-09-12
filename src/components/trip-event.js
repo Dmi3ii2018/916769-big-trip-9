@@ -1,9 +1,9 @@
 import {AbstractComponent} from "./abstract-component.js";
 
 export class TripEvent extends AbstractComponent {
-  constructor({tripType, tripTypeImage, date, price, options}) {
+  constructor({choosenTripType, tripTypeImage, date, price, options}) {
     super();
-    this._tripType = tripType;
+    this._choosenTripType = choosenTripType;
     this._tripTypeImage = tripTypeImage;
     this._date = date;
     this._price = price;
@@ -14,9 +14,9 @@ export class TripEvent extends AbstractComponent {
     return `<li class="trip-events__item">
       <div class="event">
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src=${this._tripTypeImage} alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${this._choosenTripType}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${this._tripType[Math.floor(Math.random() * 7)]}</h3>
+        <h3 class="event__title">${this._choosenTripType}</h3>
 
         <div class="event__schedule">
           <p class="event__time">

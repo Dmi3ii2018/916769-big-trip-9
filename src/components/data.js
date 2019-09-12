@@ -1,11 +1,13 @@
 const EVENTS_NUMBER = 4;
-const tripTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
+const tripTypes = [`Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
 
 export const createRoutePoint = () => ({
-  tripType: [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`],
-  activity: [`Check`, `Sightseeng`, `Restaurant`],
+  tripType: [`Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`],
+  choosenTripType: [`Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`][Math.floor(Math.random() * 6)],
+  activity: [`Check-in`, `Sightseeing`, `Restaurant`],
   tripTypeImage: `img/icons/${tripTypes[Math.floor(Math.random() * 7)]}.png`,
   cityName: [`Moscow`, `London`, `Paris`, `Oslo`, `Berlin`, `Madrid`, `Riga`, `Rome`],
+  cityDestination: [`Moscow`, `London`, `Paris`, `Oslo`, `Berlin`, `Madrid`, `Riga`, `Rome`][Math.floor(Math.random() * 7)],
   cityImages: [
     `https://picsum.photos/300/150?r=${Math.random()}`,
     `https://picsum.photos/300/150?r=${Math.random()}`,
