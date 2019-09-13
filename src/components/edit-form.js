@@ -31,11 +31,6 @@ export class EditForm extends AbstractComponent {
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Transfer</legend>
 
-              <div class="event__type-item">
-              <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="Taxi" checked>
-              <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-            </div>
-
             ${this._tripType.map((type) => `<div class="event__type-item">
               <input id="event-type-${type.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
               <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
@@ -57,7 +52,7 @@ export class EditForm extends AbstractComponent {
 
         <div class="event__field-group  event__field-group--destination">
           <label class="event__label  event__type-output" for="event-destination-1">
-            Sightseeing at
+            ${this._choosenTripType}
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${this._cityDestination} list="destination-list-1">
           <datalist id="destination-list-1">

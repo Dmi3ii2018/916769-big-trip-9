@@ -13,6 +13,7 @@ export class PointController {
     this._editForm = new EditForm(data);
 
     this.init();
+    this._checkPlaceholder();
     this._changeForm();
   }
 
@@ -80,19 +81,39 @@ export class PointController {
     render(tripEventContainer, this._tripEvent.getElement(), Position.BEFOREEND);
   }
 
+  _checkPlaceholder() {
+    const placeholder = this._editForm.getElement().querySelector(`.event__label`).textContent.trim();
+    const destination = this._editForm.getElement().querySelector(`.event__input--destination`).value;
+
+    let prep;
+    if (this._data.activity.some((type) => type === placeholder)) {
+      prep = ` in `;
+    } else {
+      prep = ` to `;
+    }
+    this._editForm.getElement().querySelector(`.event__label`).textContent = placeholder + prep;
+    this._tripEvent.getElement().querySelector(`.event__title`).textContent = placeholder + prep + destination;
+  }
+
   _changeForm() {
     const tripTypeList = this._editForm.getElement().querySelectorAll(`.event__type-input`);
 
     tripTypeList.forEach((it) => it.addEventListener(`change`, (evt) => {
-      let prep;
-      if (this._data.activity.some((type) => type === evt.target.value)) {
-        prep = `in`;
-      } else {
-        prep = `to`;
-      }
+
+      evt.target.checked = true;
       this._editForm.getElement().querySelector(`.event__type-toggle`).checked = false;
       this._editForm.getElement().querySelector(`.event__type-icon`).src = `img/icons/${evt.target.value}.png`;
-      this._editForm.getElement().querySelector(`.event__label`).textContent = `${evt.target.value + ` ` + prep}`;
+      this._editForm.getElement().querySelector(`.event__label`).textContent = evt.target.value;
+      this._checkPlaceholder();
+      const offers = this._editForm.getElement().querySelector(`.event__available-offers`);
+      offers.innerHTML = `<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage">
+        <lab8el class="event__offer-label" for="event-offer-luggage-1">
+          <span class="event__offer-title">${this._data.options.name}</span>
+          &plus;
+          &euro;&nbsp;<span class="event__offer-price">${this._data.options.price}</span>
+        </label>
+      </div>`;
     }));
 
 
