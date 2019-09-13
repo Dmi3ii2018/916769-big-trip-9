@@ -1,6 +1,6 @@
 import {AbstractComponent} from "./abstract-component";
 
-export class TripDay extends AbstractComponent {
+export class Day extends AbstractComponent {
   constructor({date}) {
     super();
     this._date = date;
