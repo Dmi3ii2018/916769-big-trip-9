@@ -2,6 +2,10 @@ import {TripEvent} from "../components/trip-event";
 import {EditForm} from "../components/edit-form";
 import {render, Position} from "../utils.js";
 import {createRoutePoint} from "../components/data.js";
+import moment from "moment";
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/light.css';
 
 export class PointController {
   constructor(container, data, onDataChange, onChangeView) {
@@ -18,6 +22,15 @@ export class PointController {
 
   init() {
     const tripEventContainer = document.querySelector(`.trip-events__list`);
+
+    this._fp = flatpickr(this._editForm.getElement().querySelectorAll(`.event__input--time`), {
+      // altInput: true,
+      allowInput: true,
+      minDate: `today`,
+      dateFormat: `d.m.y H:i`,
+      defaultDate: `today`,
+      enableTime: true,
+    });
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
@@ -55,9 +68,12 @@ export class PointController {
 
         const formData = new FormData(this._editForm.getElement().querySelector(`.event--edit`));
 
+        const startTime = this._fp[0].parseDate(formData.get(`event-start-time`), `d.m.y H:i`);
+        const endTime = this._fp[0].parseDate(formData.get(`event-end-time`), `d.m.y H:i`);
+
         const entry = {
           tripType: createRoutePoint().tripType,
-          choosenTripType: formData.get(`event-type`),
+          choosenTripType: formData.get(`event-type`) || this._editForm.getElement().querySelector(`.event__type-toggle`).value,
           activity: createRoutePoint().activity,
           tripTypeImage: createRoutePoint().tripTypeImage,
           cityName: createRoutePoint().cityName,
@@ -65,12 +81,13 @@ export class PointController {
           cityImages: createRoutePoint().cityImages,
           description: createRoutePoint().description,
           date: {
-            start: new Date(formData.get(`event-start-time`)),
-            end: new Date(formData.get(`event-end-time`)),
+            start: new Date(startTime),
+            end: new Date(endTime),
           },
           price: formData.get(`event-price`),
           options: createRoutePoint().options,
         };
+        console.log(formData.get(`event-start-time`));
 
         this._onDataChange(entry, this._data);
 
@@ -90,6 +107,8 @@ export class PointController {
       } else {
         prep = `to`;
       }
+      evt.target.setAttribute(`checked`, true);
+      console.log(evt.target);
       this._editForm.getElement().querySelector(`.event__type-toggle`).checked = false;
       this._editForm.getElement().querySelector(`.event__type-icon`).src = `img/icons/${evt.target.value}.png`;
       this._editForm.getElement().querySelector(`.event__label`).textContent = `${evt.target.value + ` ` + prep}`;
