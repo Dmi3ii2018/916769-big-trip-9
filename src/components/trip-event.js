@@ -20,9 +20,9 @@ export class TripEvent extends AbstractComponent {
 
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime=${new Date(this._date.start).toDateString()}>${new Date(this._date.start).toDateString()}</time>
+            <time class="event__start-time" datetime="${new Date(this._date.start).toDateString()}">${new Date(this._date.start).toDateString()}</time>
             &mdash;
-            <time class="event__start-time" datetime=${new Date(this._date.end).toDateString()}>${new Date(this._date.end).toDateString()}</time>
+            <time class="event__start-time" datetime="${new Date(this._date.end).toDateString()}">${new Date(this._date.end).toDateString()}</time>
           </p>
           <p class="event__duration">${Math.round((this._date.end - this._date.start) / 1000 / 60 / 60 / 24)}</p>
         </div>

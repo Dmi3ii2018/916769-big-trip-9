@@ -39,7 +39,7 @@ export const createRoutePoint = () => ({
     {name: `Switch to comfort class`, price: 150, choosen: Boolean(Math.round(Math.random()))},
     {name: `Add meal`, price: 2, choosen: Boolean(Math.round(Math.random()))},
     {name: `Choose seats`, price: 9, choosen: Boolean(Math.round(Math.random()))},
-  ][Math.floor(Math.random() * 4)],
+  ][Math.floor(Math.random() * 4)]
 });
 
 export const eventsList = new Array(EVENTS_NUMBER).fill(``).map(createRoutePoint).sort((a, b) => a.date.start - b.date.start);

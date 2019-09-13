@@ -17,6 +17,7 @@ export class PointController {
     this._editForm = new EditForm(data);
 
     this.init();
+    this._checkPlaceholder();
     this._changeForm();
   }
 
@@ -28,7 +29,7 @@ export class PointController {
       allowInput: true,
       minDate: `today`,
       dateFormat: `d.m.y H:i`,
-      defaultDate: `today`,
+      // defaultDate: `today`,
       enableTime: true,
     });
 
@@ -97,21 +98,28 @@ export class PointController {
     render(tripEventContainer, this._tripEvent.getElement(), Position.BEFOREEND);
   }
 
+  _checkPlaceholder() {
+    const placeholder = this._editForm.getElement().querySelector(`.event__label`).textContent.trim();
+    const destination = this._editForm.getElement().querySelector(`.event__input--destination`).value;
+
+    let prep;
+    if (this._data.activity.some((type) => type === placeholder)) {
+      prep = ` in `;
+    } else {
+      prep = ` to `;
+    }
+    this._editForm.getElement().querySelector(`.event__label`).textContent = placeholder + prep;
+    this._tripEvent.getElement().querySelector(`.event__title`).textContent = placeholder + prep + destination;
+  }
+
   _changeForm() {
     const tripTypeList = this._editForm.getElement().querySelectorAll(`.event__type-input`);
 
     tripTypeList.forEach((it) => it.addEventListener(`change`, (evt) => {
-      let prep;
-      if (this._data.activity.some((type) => type === evt.target.value)) {
-        prep = `in`;
-      } else {
-        prep = `to`;
-      }
-      evt.target.setAttribute(`checked`, true);
-      console.log(evt.target);
       this._editForm.getElement().querySelector(`.event__type-toggle`).checked = false;
       this._editForm.getElement().querySelector(`.event__type-icon`).src = `img/icons/${evt.target.value}.png`;
-      this._editForm.getElement().querySelector(`.event__label`).textContent = `${evt.target.value + ` ` + prep}`;
+      this._editForm.getElement().querySelector(`.event__label`).textContent = evt.target.value;
+      this._checkPlaceholder();
     }));
 
 
