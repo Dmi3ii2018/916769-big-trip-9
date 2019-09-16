@@ -1,4 +1,5 @@
 import {AbstractComponent} from "./abstract-component.js";
+import moment from "moment";
 
 export class EditForm extends AbstractComponent {
   constructor({tripType, activity, choosenTripType, tripTypeImage, cityName, cityDestination, cityImages, description, date, price, options}) {
@@ -11,7 +12,8 @@ export class EditForm extends AbstractComponent {
     this._cityDestination = cityDestination;
     this._cityImages = cityImages;
     this._description = description;
-    this._date = date;
+    this._dateStart = date.start;
+    this._dateEnd = date.end;
     this._price = price;
     this._options = options;
   }
@@ -25,14 +27,14 @@ export class EditForm extends AbstractComponent {
             <span class="visually-hidden">Choose event type</span>
             <img class="event__type-icon" width="17" height="17" src="img/icons/${this._choosenTripType}.png" alt="Event type icon">
           </label>
-          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" value = ${this._choosenTripType}>
 
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Transfer</legend>
 
             ${this._tripType.map((type) => `<div class="event__type-item">
-              <input id="event-type-${type.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+              <input id="event-type-${type.toLowerCase()}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${type}">
               <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
             </div>`).join(``)}
 
@@ -64,12 +66,12 @@ export class EditForm extends AbstractComponent {
           <label class="visually-hidden" for="event-start-time-1">
             From
           </label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${new Date(this._date.start).toDateString()}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${moment(this._dateStart).format(`D/MM/YY h:mm`)}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">
             To
           </label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${new Date(this._date.end).toDateString()}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${moment(this._dateEnd).format(`D/MM/YY h:mm`)}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
