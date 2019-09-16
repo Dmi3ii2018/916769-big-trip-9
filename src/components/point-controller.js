@@ -2,10 +2,10 @@ import {TripEvent} from "../components/trip-event";
 import {EditForm} from "../components/edit-form";
 import {render, Position} from "../utils.js";
 import {createRoutePoint} from "../components/data.js";
-import moment from "moment";
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
+import moment from "moment";
 
 export class PointController {
   constructor(container, data, onDataChange, onChangeView) {
@@ -17,6 +17,7 @@ export class PointController {
     this._editForm = new EditForm(data);
 
     this.init();
+    this._checkDuration();
     this._checkPlaceholder();
     this._changeForm();
   }
@@ -25,12 +26,11 @@ export class PointController {
     const tripEventContainer = document.querySelector(`.trip-events__list`);
 
     this._fp = flatpickr(this._editForm.getElement().querySelectorAll(`.event__input--time`), {
-      // altInput: true,
       allowInput: true,
       minDate: `today`,
-      dateFormat: `d.m.y H:i`,
-      // defaultDate: `today`,
+      dateFormat: `d/m/y H:i`,
       enableTime: true,
+      time_24hr: false,
     });
 
     const onEscKeyDown = (evt) => {
@@ -95,6 +95,13 @@ export class PointController {
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
+    // const timeInput = this._editForm.getElement().querySelectorAll(`.event__input--time`);
+    // timeInput.forEach((it) => {
+    //   it.addEventListener(`change`, () => {
+    //     this._checkDuration();
+    //   });
+    // });
+
     render(tripEventContainer, this._tripEvent.getElement(), Position.BEFOREEND);
   }
 
@@ -121,8 +128,22 @@ export class PointController {
       this._editForm.getElement().querySelector(`.event__label`).textContent = evt.target.value;
       this._checkPlaceholder();
     }));
+  }
 
+  _checkDuration() {
+    const durationField = this._tripEvent.getElement().querySelector(`.event__duration`);
+    let duration = (this._data.date.end - this._data.date.start) / 1000 / 60 / 60;
+    console.log(duration);
 
+    if (duration >= 24) {
+      duration = moment(this._data.date.end - this._data.date.start).format(`D[D] h[H] mm[M]`);
+    } else if (duration < 24) {
+      duration = moment(this._data.date.end - this._data.date.start).format(`h[H] mm[M]`);
+    } else if (duration < 1 && duration >= 0) {
+      duration = moment(this._data.date.end - this._data.date.start).format(`mm[M]`);
+    }
+
+    durationField.textContent = duration;
   }
 
   setDefaultView() {

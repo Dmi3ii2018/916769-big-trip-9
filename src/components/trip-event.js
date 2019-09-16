@@ -1,4 +1,5 @@
 import {AbstractComponent} from "./abstract-component.js";
+import moment from "moment";
 
 export class TripEvent extends AbstractComponent {
   constructor({choosenTripType, tripTypeImage, date, price, options}) {
@@ -20,11 +21,11 @@ export class TripEvent extends AbstractComponent {
 
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="${new Date(this._date.start).toDateString()}">${new Date(this._date.start).toDateString()}</time>
+            <time class="event__start-time" datetime="${this._date.start}">${moment(this._date.start).format(`h:mm`)}</time>
             &mdash;
-            <time class="event__start-time" datetime="${new Date(this._date.end).toDateString()}">${new Date(this._date.end).toDateString()}</time>
+            <time class="event_end-time" datetime="${this._date.end}">${moment(this._date.end).format(`h:mm`)}</time>
           </p>
-          <p class="event__duration">${Math.round((this._date.end - this._date.start) / 1000 / 60 / 60 / 24)}</p>
+          <p class="event__duration"></p>
         </div>
 
         <p class="event__price">
