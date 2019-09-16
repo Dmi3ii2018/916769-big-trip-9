@@ -30,7 +30,7 @@ export class PointController {
       minDate: `today`,
       dateFormat: `d/m/y H:i`,
       enableTime: true,
-      time_24hr: false,
+      // time_24hr: false,
     });
 
     const onEscKeyDown = (evt) => {
@@ -88,7 +88,6 @@ export class PointController {
           price: formData.get(`event-price`),
           options: createRoutePoint().options,
         };
-        console.log(formData.get(`event-start-time`));
 
         this._onDataChange(entry, this._data);
 
@@ -133,7 +132,6 @@ export class PointController {
   _checkDuration() {
     const durationField = this._tripEvent.getElement().querySelector(`.event__duration`);
     let duration = (this._data.date.end - this._data.date.start) / 1000 / 60 / 60;
-    console.log(duration);
 
     if (duration >= 24) {
       duration = moment(this._data.date.end - this._data.date.start).format(`D[D] h[H] mm[M]`);
