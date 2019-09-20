@@ -27,4 +27,3 @@ export class TripInfo extends AbstractComponent {
   </section>`;
   }
 }
-

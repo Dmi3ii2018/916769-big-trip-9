@@ -1,5 +1,6 @@
 import {Menu} from "../src/components/menu.js";
 import {Filter} from "../src/components/filter.js";
+import {Stat} from "../src/components/stat.js";
 import {TripController} from "../src/controllers/trip-controller.js";
 import {TripInfo} from "../src/components/trip-info.js";
 import {eventsList, createMenu, createFilter, createRouteInfo} from "../src/components/data.js";
@@ -30,3 +31,7 @@ renderFilter(createFilter());
 const taskContainer = document.querySelector(`.trip-events`);
 const tripController = new TripController(taskContainer, eventsList);
 tripController.init();
+
+const renderStats = new Stat();
+const statContainer = document.querySelector(`.page-body__page-main`).querySelector(`.page-body__container`);
+render(statContainer, renderStats.getElement(), Position.BEFOREEND);

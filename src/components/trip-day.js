@@ -1,15 +1,16 @@
 import {AbstractComponent} from "./abstract-component";
 
 export class Day extends AbstractComponent {
-  constructor({date}) {
+  constructor(counter, {date}) {
     super();
+    this._counter = counter;
     this._date = date;
   }
 
   getTemplate() {
     return `<li class="trip-days__item  day">
       <div class="day__info">
-        <span class="day__counter">1</span>
+        <span class="day__counter">${this._counter}</span>
         <time class="day__date" datetime=${new Date(this._date.start).toDateString()}>${new Date(this._date.start).toDateString()}</time>
       </div>
     </li>`;
