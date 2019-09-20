@@ -1,5 +1,6 @@
 import {TripEvent} from "../components/trip-event";
 import {EditForm} from "../components/edit-form";
+// import {NewEvent} from "../components/new-event.js";
 import {render, Position} from "../utils.js";
 import {createRoutePoint} from "../components/data.js";
 import flatpickr from 'flatpickr';
@@ -7,30 +8,49 @@ import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
 import moment from "moment";
 
+const Mode = {
+  ADDING: `adding`,
+  DEFAULT: `default`,
+};
+
 export class PointController {
-  constructor(container, data, onDataChange, onChangeView) {
+  constructor(container, data, mode, onDataChange, onChangeView) {
     this._container = container;
     this._data = data;
+
     this._onChangeView = onChangeView;
     this._onDataChange = onDataChange;
+
     this._tripEvent = new TripEvent(data);
     this._editForm = new EditForm(data);
+    // this._newEvent = new NewEvent(data);
 
-    this.init();
+    this.init(mode);
     this._checkDuration();
     this._checkPlaceholder();
     this._changeForm();
   }
 
-  init() {
+  init(mode) {
     const tripEventContainer = document.querySelector(`.trip-events__list`);
+    let renderPosition = Position.BEFOREEND;
+    let currentView = this._tripEvent;
+
+    if (mode === Mode.ADDING) {
+      renderPosition = Position.AFTERBEGIN;
+      currentView = this._editForm;
+      currentView.getElement().querySelector(`.event__reset-btn`).textContent = `Cancel`;
+      currentView.getElement().querySelector(`.event__input--price`).value = ``;
+      currentView.getElement().querySelector(`.event__favorite-btn`).classList.add(`visually-hidden`);
+      currentView.getElement().querySelector(`.event__rollup-btn`).style = `display: none`;
+    }
+
 
     this._fp = flatpickr(this._editForm.getElement().querySelectorAll(`.event__input--time`), {
       allowInput: true,
       minDate: `today`,
       dateFormat: `d/m/y H:i`,
       enableTime: true,
-      // time_24hr: false,
     });
 
     const onEscKeyDown = (evt) => {
@@ -46,6 +66,9 @@ export class PointController {
     this._tripEvent.getElement().querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, () => {
         this._onChangeView();
+        this._editForm.getElement().querySelector(`.event__reset-btn`).textContent = `Delete`;
+        this._editForm.getElement().querySelector(`.event__favorite-btn`).classList.remove(`visually-hidden`);
+        this._editForm.getElement().querySelector(`.event__rollup-btn`).style = `display: block`;
         tripEventContainer.replaceChild(this._editForm.getElement(), this._tripEvent.getElement());
         document.addEventListener(`keydown`, onEscKeyDown);
       });
@@ -89,10 +112,18 @@ export class PointController {
           options: createRoutePoint().options,
         };
 
-        this._onDataChange(entry, this._data);
+        this._onDataChange(entry, mode === Mode.DEFAULT ? this._data : null);
 
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
+
+    this._editForm.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, () => {
+      if (mode === Mode.ADDING) {
+        this._onDataChange(null, null);
+      } else {
+        this._onDataChange(null, this._data);
+      }
+    });
 
     // const timeInput = this._editForm.getElement().querySelectorAll(`.event__input--time`);
     // timeInput.forEach((it) => {
@@ -101,7 +132,7 @@ export class PointController {
     //   });
     // });
 
-    render(tripEventContainer, this._tripEvent.getElement(), Position.BEFOREEND);
+    render(tripEventContainer, currentView.getElement(), renderPosition);
   }
 
   _checkPlaceholder() {
@@ -132,13 +163,16 @@ export class PointController {
   _checkDuration() {
     const durationField = this._tripEvent.getElement().querySelector(`.event__duration`);
     let duration = (this._data.date.end - this._data.date.start) / 1000 / 60 / 60;
+    const momentDuration = moment(this._data.date.end - this._data.date.start)
+    .utc()
+    .subtract(1, `days`);
 
     if (duration >= 24) {
-      duration = moment(this._data.date.end - this._data.date.start).format(`D[D] h[H] mm[M]`);
-    } else if (duration < 24) {
-      duration = moment(this._data.date.end - this._data.date.start).format(`h[H] mm[M]`);
+      duration = momentDuration.format(`D[D] HH[H] mm[M]`);
     } else if (duration < 1 && duration >= 0) {
-      duration = moment(this._data.date.end - this._data.date.start).format(`mm[M]`);
+      duration = momentDuration.format(`mm[M]`);
+    } else if (duration < 24) {
+      duration = momentDuration.format(`HH[H] mm[M]`);
     }
 
     durationField.textContent = duration;
