@@ -7,6 +7,7 @@ import {Stat} from "../components/stat.js";
 import {Menu} from "../components/menu.js";
 import {render, Position, unrender} from "../utils.js";
 import {createRoutePoint} from "../components/data.js";
+import {getStatistics} from "../stat-controller.js";
 
 const Mode = {
   ADDING: `adding`,
@@ -127,10 +128,17 @@ export class TripController {
 
     switch (evt.target.textContent) {
       case `Stats`: {
+        const moneyCtx = document.querySelector(`.statistics__chart--money`);
+        const transportCtx = document.querySelector(`.statistics__chart--transport`);
+        const timeSpentCtx = document.querySelector(`.statistics__chart--time`);
+
         evt.target.classList.add(`trip-tabs__btn--active`);
         document.querySelector(`.statistics`).classList.remove(`visually-hidden`);
 
         eventsContainer.classList.add(`trip-events--hidden`);
+
+        getStatistics(moneyCtx, transportCtx, timeSpentCtx);
+
         break;
       }
       case `Table`: {
