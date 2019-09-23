@@ -32,7 +32,7 @@ export class PointController {
   }
 
   init(mode) {
-    const tripEventContainer = document.querySelector(`.trip-events__list`);
+    const tripEventContainer = document.querySelectorAll(`.trip-events__list`);
     let renderPosition = Position.BEFOREEND;
     let currentView = this._tripEvent;
 
@@ -56,8 +56,8 @@ export class PointController {
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
 
-        if (this._editForm.getElement().parentNode === tripEventContainer) {
-          tripEventContainer.replaceChild(this._tripEvent.getElement(), this._editForm.getElement());
+        if (this._editForm.getElement().parentNode === tripEventContainer[tripEventContainer.length - 1]) {
+          tripEventContainer[tripEventContainer.length - 1].replaceChild(this._tripEvent.getElement(), this._editForm.getElement());
           document.removeEventListener(`keydown`, onEscKeyDown);
         }
       }
@@ -69,20 +69,20 @@ export class PointController {
         this._editForm.getElement().querySelector(`.event__reset-btn`).textContent = `Delete`;
         this._editForm.getElement().querySelector(`.event__favorite-btn`).classList.remove(`visually-hidden`);
         this._editForm.getElement().querySelector(`.event__rollup-btn`).style = `display: block`;
-        tripEventContainer.replaceChild(this._editForm.getElement(), this._tripEvent.getElement());
+        tripEventContainer[tripEventContainer.length - 1].replaceChild(this._editForm.getElement(), this._tripEvent.getElement());
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
     this._editForm.getElement().querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, () => {
-        tripEventContainer.replaceChild(this._tripEvent.getElement(), this._editForm.getElement());
+        tripEventContainer[tripEventContainer.length - 1].replaceChild(this._tripEvent.getElement(), this._editForm.getElement());
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
     this._editForm.getElement().querySelector(`.event--edit`)
       .addEventListener(`submit`, (evt) => {
         evt.preventDefault();
-        tripEventContainer.replaceChild(this._tripEvent.getElement(), this._editForm.getElement());
+        tripEventContainer[tripEventContainer.length - 1].replaceChild(this._tripEvent.getElement(), this._editForm.getElement());
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -125,14 +125,11 @@ export class PointController {
       }
     });
 
-    // const timeInput = this._editForm.getElement().querySelectorAll(`.event__input--time`);
-    // timeInput.forEach((it) => {
-    //   it.addEventListener(`change`, () => {
-    //     this._checkDuration();
-    //   });
-    // });
-
-    render(tripEventContainer, currentView.getElement(), renderPosition);
+    if (mode === Mode.ADDING) {
+      render(tripEventContainer[0], currentView.getElement(), renderPosition);
+    } else {
+      render(tripEventContainer[tripEventContainer.length - 1], currentView.getElement(), renderPosition);
+    }
   }
 
   _checkPlaceholder() {
