@@ -5,6 +5,7 @@ import {PointController} from "../components/point-controller.js";
 import {Sort} from "../components/sort.js";
 import {Stat} from "../components/stat.js";
 import {Menu} from "../components/menu.js";
+import {Filter} from "../components/filter.js";
 import {render, Position, unrender} from "../utils.js";
 import {createRoutePoint} from "../components/data.js";
 import {getStatistics} from "../stat-controller.js";
@@ -24,6 +25,7 @@ export class TripController {
     this._sort = new Sort();
     this._stat = new Stat();
     this._menu = new Menu();
+    this._filter = new Filter();
     this.Day = new Day(1, this._events[0]);
 
     this._creatingEvent = null;
@@ -48,6 +50,7 @@ export class TripController {
 
     document.querySelector(`.trip-main__trip-controls`).addEventListener(`click`, (evt) => this._onMenuClick(evt));
 
+    document.querySelector(`.trip-filters`).addEventListener(`change`, (evt) => this._onFilterClick(evt));
     this._sort.getElement().addEventListener(`change`, (evt) => this._onSortChange(evt));
 
     document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => this._onNewTaskClick(evt));
@@ -107,7 +110,6 @@ export class TripController {
     switch (evt.target.dataset.sortType) {
       case `time-up`: {
         eventData = this._events.slice().sort((a, b) => b.date.start - a.date.start);
-
         this._renderDay(eventData, this._renderTripEvent);
         break;
       }
@@ -135,8 +137,8 @@ export class TripController {
     menuItems.forEach((it) => it.classList.remove(`trip-tabs__btn--active`));
     const eventsContainer = document.querySelector(`.trip-events`);
 
-    switch (evt.target.textContent) {
-      case `Stats`: {
+    switch (evt.target.dataset.viewType) {
+      case `stats`: {
         const moneyCtx = document.querySelector(`.statistics__chart--money`);
         const transportCtx = document.querySelector(`.statistics__chart--transport`);
         const timeSpentCtx = document.querySelector(`.statistics__chart--time`);
@@ -150,13 +152,43 @@ export class TripController {
 
         break;
       }
-      case `Table`: {
+      case `table`: {
         evt.target.classList.add(`trip-tabs__btn--active`);
         eventsContainer.classList.remove(`trip-events--hidden`);
         document.querySelector(`.statistics`).classList.add(`visually-hidden`);
         break;
       }
     }
+  }
+
+  _onFilterClick(evt) {
+    evt.preventDefault();
+
+    if (evt.target.tagName !== `INPUT`) {
+      return;
+    }
+
+    let eventData;
+    let currentTime = Date.now();
+
+    switch (evt.target.dataset.filterType) {
+      case `future`: {
+        evt.target.checked = true;
+        eventData = this.events.filter((it) => it.date.start > currentTime);
+        console.log(eventData);
+        break;
+      }
+      case `past`: {
+        eventData = this._events.filter((it) => it.date.end < currentTime);
+        break;
+      }
+      case `default`: {
+        eventData = this._events;
+        break;
+      }
+    }
+
+    this._renderDay(eventData, this.renderAllDays);
   }
 
   createEvent() {
@@ -176,11 +208,6 @@ export class TripController {
     let timeData = moment(item.date.start).format(`MM DD`);
     let dayTime = document.querySelectorAll(`.day__date`);
     let index = dayTime.length - 1;
-
-    // console.log(new Date(item.date.start));
-    // console.log(moment(item.date.start).format(`MM DD`));
-    // console.log(moment(dayTime[index].dateTime).format(`MM DD`));
-    // console.log((moment(item.date.start).format(`MM DD`)) <= (moment(dayTime[index].dateTime).format(`MM DD`)));
 
     if (timeData <= moment(dayTime[index].dateTime).format(`MM DD`)) {
       this._renderTripEvent(item);
