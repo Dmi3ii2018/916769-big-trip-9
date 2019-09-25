@@ -85,9 +85,8 @@ const moneyChart = (moneyCtx) => new Chart(moneyCtx, {
     },
     scales: {
       yAxes: [{
-        // minBarLength: 50,
-        // // barThickness: 70,
-        // // maxBarThickness: 80,
+        barThickness: 40,
+        maxBarThickness: 50,
         ticks: {
           callback(value) {
             return value.toUpperCase();
@@ -99,30 +98,6 @@ const moneyChart = (moneyCtx) => new Chart(moneyCtx, {
           drawBorder: false
         }
       }],
-      // yAxes: [{
-      //   minBarLength: 100,
-      //   barThickness: 70,
-      //   maxBarThickness: 80,
-      //   gridLines: {
-      //     display: false,
-      //     drawBorder: false
-      //   },
-      //   ticks: {
-      //     callback(value) {
-      //       return value.toUpperCase();
-      //     },
-      //     color: `#000000`,
-      //   }
-      // }],
-      // xAxes: [{
-      //   ticks: {
-      //     display: false,
-      //   },
-      //   gridLines: {
-      //     display: false,
-      //     drawBorder: false
-      //   }
-      // }],
       xAxes: [{
         minBarLength: 50,
         ticks: {
@@ -169,6 +144,11 @@ const transportChart = (transprotCtx) => new Chart(transprotCtx, {
     legend: {
       display: false,
     },
+    layout: {
+      padding: {
+        top: 10,
+      }
+    },
     title: {
       display: true,
       text: `TRANSPORT`,
@@ -177,10 +157,10 @@ const transportChart = (transprotCtx) => new Chart(transprotCtx, {
       fontColor: `#000000`
     },
     scales: {
+      offset: true,
       yAxes: [{
-        // minBarLength: 50,
-        barThickness: 70,
-        // maxBarThickness: 80,
+        barThickness: 40,
+        maxBarThickness: 50,
         ticks: {
           callback(value) {
             return value.toUpperCase();
@@ -246,10 +226,11 @@ const timeSpentChart = (transprotCtx) => new Chart(transprotCtx, {
       fontColor: `#000000`
     },
     scales: {
+
       yAxes: [{
         minBarLength: 50,
-        // barThickness: 70,
-        // maxBarThickness: 80,
+        barThickness: 40,
+        maxBarThickness: 50,
         ticks: {
           callback(value) {
             return value.toUpperCase();
@@ -262,6 +243,11 @@ const timeSpentChart = (transprotCtx) => new Chart(transprotCtx, {
         }
       }],
       xAxes: [{
+        layout: {
+          padding: {
+            top: 0,
+          }
+        },
         minBarLength: 50,
         ticks: {
           display: false,
