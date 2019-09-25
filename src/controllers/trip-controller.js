@@ -48,9 +48,10 @@ export class TripController {
 
     this._events.forEach((it) => this.renderAllDays(it));
 
-    document.querySelector(`.trip-main__trip-controls`).addEventListener(`click`, (evt) => this._onMenuClick(evt));
+    document.querySelector(`.trip-controls__trip-tabs`).addEventListener(`click`, (evt) => this._onMenuClick(evt));
 
     document.querySelector(`.trip-filters`).addEventListener(`change`, (evt) => this._onFilterClick(evt));
+
     this._sort.getElement().addEventListener(`change`, (evt) => this._onSortChange(evt));
 
     document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => this._onNewTaskClick(evt));
@@ -170,25 +171,47 @@ export class TripController {
 
     let eventData;
     let currentTime = Date.now();
+    const eventsContainer = document.querySelector(`.trip-events`);
 
     switch (evt.target.dataset.filterType) {
       case `future`: {
-        evt.target.checked = true;
-        eventData = this.events.filter((it) => it.date.start > currentTime);
+        //evt.target.checked = true;
+        eventData = this._events.filter((it) => it.date.start > currentTime);
+        if (eventData.length === 0) {
+          let pastText = `There is no events of future`;
+          unrender(this._tripDaysList.getElement());
+          this._tripDaysList.removeElement();
+          this._tripDaysList.getElement().setAttribute(`style`, `padding-top: 40px; text-align: center;`);
+          render(this._container, this._tripDaysList.getElement(), Position.BEFOREEND);
+          render(this._tripDaysList.getElement(), pastText, Position.BEFOREEND);
+        } else {
+          this._renderDay(eventData, this.renderAllDays);
+        }
         console.log(eventData);
         break;
       }
       case `past`: {
         eventData = this._events.filter((it) => it.date.end < currentTime);
+        if (eventData.length === 0) {
+          let pastText = `There is no events of past`;
+          unrender(this._tripDaysList.getElement());
+          this._tripDaysList.removeElement();
+          this._tripDaysList.getElement().setAttribute(`style`, `padding-top: 40px; text-align: center;`);
+          render(this._container, this._tripDaysList.getElement(), Position.BEFOREEND);
+          render(this._tripDaysList.getElement(), pastText, Position.BEFOREEND);
+        } else {
+          this._renderDay(eventData, this.renderAllDays);
+        }
+        console.log(eventData);
         break;
       }
       case `default`: {
         eventData = this._events;
+        this._renderDay(eventData, this.renderAllDays);
         break;
       }
     }
 
-    this._renderDay(eventData, this.renderAllDays);
   }
 
   createEvent() {
