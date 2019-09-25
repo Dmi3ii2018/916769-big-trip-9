@@ -36,7 +36,6 @@ export class TripController {
   }
 
   init() {
-    console.log(this._events);
     // if (this._events.length === 0) {
     //   const newEvent = new NewEvent(createRoutePoint());
     //   render(this._container, newEvent.getElement(), Position.AFTERBEGIN);
@@ -171,11 +170,9 @@ export class TripController {
 
     let eventData;
     let currentTime = Date.now();
-    const eventsContainer = document.querySelector(`.trip-events`);
 
     switch (evt.target.dataset.filterType) {
       case `future`: {
-        //evt.target.checked = true;
         eventData = this._events.filter((it) => it.date.start > currentTime);
         if (eventData.length === 0) {
           let pastText = `There is no events of future`;
@@ -187,7 +184,6 @@ export class TripController {
         } else {
           this._renderDay(eventData, this.renderAllDays);
         }
-        console.log(eventData);
         break;
       }
       case `past`: {
@@ -202,7 +198,6 @@ export class TripController {
         } else {
           this._renderDay(eventData, this.renderAllDays);
         }
-        console.log(eventData);
         break;
       }
       case `default`: {
@@ -224,6 +219,7 @@ export class TripController {
 
   _onNewTaskClick(evt) {
     evt.preventDefault();
+    this._onChangeView();
     this.createEvent();
   }
 

@@ -48,7 +48,7 @@ export class PointController {
 
     this._fp = flatpickr(this._editForm.getElement().querySelectorAll(`.event__input--time`), {
       allowInput: true,
-      //minDate: `today`,
+      // minDate: `today`,
       dateFormat: `d/m/y H:i`,
       enableTime: true,
     });
