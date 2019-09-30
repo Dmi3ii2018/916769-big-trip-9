@@ -7,7 +7,7 @@ import {Stat} from "../components/stat.js";
 import {Menu} from "../components/menu.js";
 import {Filter} from "../components/filter.js";
 import {render, Position, unrender} from "../utils.js";
-import {createRoutePoint} from "../components/data.js";
+// import {createRoutePoint} from "../components/data.js";
 import {getStatistics} from "../stat-controller.js";
 import moment from "moment";
 
@@ -32,7 +32,7 @@ export class TripController {
 
     this._subscriptions = [];
     this._onChangeView = this._onChangeView.bind(this);
-    this._onDataChange = this._onDataChange.bind(this);
+    // this._onDataChange = this._onDataChange.bind(this);
   }
 
   init() {
@@ -80,21 +80,21 @@ export class TripController {
     this._subscriptions.forEach((it) => it());
   }
 
-  _onDataChange(newData, oldData) {
-    const index = this._events.findIndex((it) => it === oldData);
-    if (newData === null && oldData === null) {
-      this._creatingEvent = null;
-    } else if (newData === null) {
-      this._events = [...this._events.slice(0, index), ...this._events.slice(index + 1)];
-    } else if (oldData === null) {
-      this._creatingEvent = null;
-      this._events = [newData, ...this._events];
-    } else {
-      this._events[index] = newData;
-    }
-    this._events = this._events.sort((a, b) => a.date.start - b.date.start);
-    this._renderDay(this._events, this.renderAllDays);
-  }
+  // _onDataChange(newData, oldData) {
+  //   const index = this._events.findIndex((it) => it === oldData);
+  //   if (newData === null && oldData === null) {
+  //     this._creatingEvent = null;
+  //   } else if (newData === null) {
+  //     this._events = [...this._events.slice(0, index), ...this._events.slice(index + 1)];
+  //   } else if (oldData === null) {
+  //     this._creatingEvent = null;
+  //     this._events = [newData, ...this._events];
+  //   } else {
+  //     this._events[index] = newData;
+  //   }
+  //   this._events = this._events.sort((a, b) => a.date.start - b.date.start);
+  //   this._renderDay(this._events, this.renderAllDays);
+  // }
 
   _onSortChange(evt) {
     evt.preventDefault();

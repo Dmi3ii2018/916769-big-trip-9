@@ -106,7 +106,7 @@ export class EditForm extends AbstractComponent {
           <div class="event__available-offers">
             <div class="event__offer-selector">
               <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${this._options.choosen ? `checked` : ``}>
-              <lab8el class="event__offer-label" for="event-offer-luggage-1">
+              <label class="event__offer-label" for="event-offer-luggage-1">
                 <span class="event__offer-title">${this._options.name}</span>
                 &plus;
                 &euro;&nbsp;<span class="event__offer-price">${this._options.price}</span>
@@ -131,7 +131,7 @@ export class EditForm extends AbstractComponent {
 
           <div class="event__photos-container">
             <div class="event__photos-tape">
-            ${this._cityImages.map((it) => `<img class="event__photo" src=${it} alt="Event photo">`).join(``)}
+            ${this._cityImages.map((it) => `<img class="event__photo" src=${it.src} alt="${it.description}">`).join(``)}
             </div>
           </div>
         </section>

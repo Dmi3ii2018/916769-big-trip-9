@@ -1,6 +1,6 @@
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import {eventsList} from "./components/data.js";
+import {eventsList} from "../src/main.js";
 
 const getLabelList = (eventsData) => {
   let choosenTrip = eventsData.map((it) => it.choosenTripType);
@@ -44,10 +44,10 @@ const moneyChart = (moneyCtx) => new Chart(moneyCtx, {
   plugins: [ChartDataLabels],
   type: `horizontalBar`,
   data: {
-    labels: getLabelList(eventsList),
+    labels: eventsList.then((result) => getLabelList(result)),
     datasets: [{
       label: ``,
-      data: createMoneyData(eventsList),
+      data: eventsList.then((result) => createMoneyData(result)),
       backgroundColor: `rgba(255, 255, 255, 1)`,
       borderWidth: 1
     }]
@@ -142,10 +142,10 @@ const transportChart = (transprotCtx) => new Chart(transprotCtx, {
   plugins: [ChartDataLabels],
   type: `horizontalBar`,
   data: {
-    labels: getLabelList(eventsList),
+    labels: eventsList.then((result) => getLabelList(result)),
     datasets: [{
       label: ``,
-      data: createTransportData(eventsList),
+      data: eventsList.then((result) => createTransportData(result)),
       backgroundColor: `rgba(255, 255, 255, 1)`,
       borderWidth: 1
     }]
@@ -211,10 +211,10 @@ const timeSpentChart = (transprotCtx) => new Chart(transprotCtx, {
   plugins: [ChartDataLabels],
   type: `horizontalBar`,
   data: {
-    labels: getLabelList(eventsList),
+    labels: eventsList.then((result) => getLabelList(result)),
     datasets: [{
       label: ``,
-      data: createTimeSpentData(eventsList),
+      data: eventsList.then((result) => createTimeSpentData(result)),
       backgroundColor: `rgba(255, 255, 255, 1)`,
       borderWidth: 1
     }]

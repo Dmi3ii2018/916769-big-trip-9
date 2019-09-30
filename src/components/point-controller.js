@@ -2,7 +2,7 @@ import {TripEvent} from "../components/trip-event";
 import {EditForm} from "../components/edit-form";
 // import {NewEvent} from "../components/new-event.js";
 import {render, Position} from "../utils.js";
-import {createRoutePoint} from "../components/data.js";
+// import {createRoutePoint} from "../components/data.js";
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
@@ -90,27 +90,27 @@ export class PointController {
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
 
-        const formData = new FormData(this._editForm.getElement().querySelector(`.event--edit`));
+        // const formData = new FormData(this._editForm.getElement().querySelector(`.event--edit`));
 
-        const startTime = this._fp[0].parseDate(formData.get(`event-start-time`), `d.m.y H:i`);
-        const endTime = this._fp[0].parseDate(formData.get(`event-end-time`), `d.m.y H:i`);
+        // const startTime = this._fp[0].parseDate(formData.get(`event-start-time`), `d.m.y H:i`);
+        // const endTime = this._fp[0].parseDate(formData.get(`event-end-time`), `d.m.y H:i`);
 
-        const entry = {
-          tripType: createRoutePoint().tripType,
-          choosenTripType: formData.get(`event-type`) || this._editForm.getElement().querySelector(`.event__type-toggle`).value,
-          activity: createRoutePoint().activity,
-          tripTypeImage: createRoutePoint().tripTypeImage,
-          cityName: createRoutePoint().cityName,
-          cityDestination: formData.get(`event-destination`),
-          cityImages: createRoutePoint().cityImages,
-          description: createRoutePoint().description,
-          date: {
-            start: new Date(startTime),
-            end: new Date(endTime),
-          },
-          price: formData.get(`event-price`),
-          options: createRoutePoint().options,
-        };
+        // const entry = {
+        //   tripType: createRoutePoint().tripType,
+        //   choosenTripType: formData.get(`event-type`) || this._editForm.getElement().querySelector(`.event__type-toggle`).value,
+        //   activity: createRoutePoint().activity,
+        //   tripTypeImage: createRoutePoint().tripTypeImage,
+        //   cityName: createRoutePoint().cityName,
+        //   cityDestination: formData.get(`event-destination`),
+        //   cityImages: createRoutePoint().cityImages,
+        //   description: createRoutePoint().description,
+        //   date: {
+        //     start: new Date(startTime),
+        //     end: new Date(endTime),
+        //   },
+        //   price: formData.get(`event-price`),
+        //   options: createRoutePoint().options,
+        // };
 
         this._onDataChange(entry, mode === Mode.DEFAULT ? this._data : null);
 
@@ -137,7 +137,7 @@ export class PointController {
     const destination = this._editForm.getElement().querySelector(`.event__input--destination`).value;
 
     let prep;
-    if (this._data.activity.some((type) => type === placeholder)) {
+    if (this._data.activity.some((type) => type.toLowerCase() === placeholder)) {
       prep = ` in `;
     } else {
       prep = ` to `;
