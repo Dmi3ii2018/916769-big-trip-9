@@ -49,7 +49,13 @@ export function createRouteInfo(eventsList) {
       dateEnd: eventsList[eventsList.length - 1].date.end,
       get cost() {
         let mainCost = eventsList.map((it) => it.price).reduce((previousValue, currentValue) => previousValue + currentValue);
-        let additionalCost = eventsList.map((it) => it.options.price).reduce((previousValue, currentValue) => previousValue + currentValue);
+        let choosenOptions = [];
+        eventsList.map((it) => it.options.map((option) => {
+          if (option.choosen) {
+            choosenOptions.push(option.price);
+          }
+        }));
+        let additionalCost = choosenOptions.reduce((previousValue, currentValue) => previousValue + currentValue);
         return mainCost + additionalCost;
       },
 

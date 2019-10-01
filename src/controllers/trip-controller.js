@@ -21,7 +21,7 @@ export class TripController {
     this._container = container;
     this._events = events;
     this._tripDaysList = new TripDaysList();
-    this._dayEventsList = new DayEventsList();
+    this.dayEventsList = new DayEventsList();
     this._sort = new Sort();
     this._stat = new Stat();
     this._menu = new Menu();
@@ -43,7 +43,7 @@ export class TripController {
     render(this._container, this._sort.getElement(), Position.BEFOREEND);
     render(this._container, this._tripDaysList.getElement(), Position.BEFOREEND);
     render(this._tripDaysList.getElement(), this.Day.getElement(), Position.BEFOREEND);
-    render(this.Day.getElement(), this._dayEventsList.getElement(), Position.BEFOREEND);
+    render(this.Day.getElement(), this.dayEventsList.getElement(), Position.BEFOREEND);
 
     this._events.forEach((it) => this.renderAllDays(it));
 
@@ -62,17 +62,17 @@ export class TripController {
 
     this._tripDaysList.removeElement();
     this.Day.removeElement();
-    this._dayEventsList.removeElement();
+    this.dayEventsList.removeElement();
     this.Day = new Day(1, tripEvents[0]);
     render(this._container, this._tripDaysList.getElement(), Position.BEFOREEND);
     render(this._tripDaysList.getElement(), this.Day.getElement(), Position.BEFOREEND);
-    render(this.Day.getElement(), this._dayEventsList.getElement(), Position.BEFOREEND);
+    render(this.Day.getElement(), this.dayEventsList.getElement(), Position.BEFOREEND);
 
     tripEvents.forEach((it) => callback.call(this, it));
   }
 
   _renderTripEvent(tripEventData) {
-    const pointController = new PointController(this._dayEventsList, tripEventData, Mode.DEFAULT, this._onDataChange, this._onChangeView);
+    const pointController = new PointController(this.dayEventsList, tripEventData, Mode.DEFAULT, this._onDataChange, this._onChangeView);
     this._subscriptions.push(pointController.setDefaultView.bind(pointController));
   }
 
@@ -103,7 +103,7 @@ export class TripController {
       return;
     }
 
-    this._dayEventsList.getElement().innerHTML = ``;
+    this.dayEventsList.getElement().innerHTML = ``;
 
     let eventData;
 
@@ -214,7 +214,7 @@ export class TripController {
       return;
     }
     const defaultEvent = createRoutePoint();
-    this._creatingEvent = new PointController(this._dayEventsList, defaultEvent, Mode.ADDING, this._onDataChange, this._onChangeView);
+    this._creatingEvent = new PointController(this.dayEventsList, defaultEvent, Mode.ADDING, this._onDataChange, this._onChangeView);
   }
 
   _onNewTaskClick(evt) {
@@ -232,9 +232,9 @@ export class TripController {
       this._renderTripEvent(item);
     } else {
       let day = new Day(index + 2, item);
-      let eventList = new DayEventsList();
+      this.dayEventsList = new DayEventsList();
       render(this._tripDaysList.getElement(), day.getElement(), Position.BEFOREEND);
-      render(day.getElement(), eventList.getElement(), Position.BEFOREEND);
+      render(day.getElement(), this.dayEventsList.getElement(), Position.BEFOREEND);
       this._renderTripEvent(item);
     }
   }

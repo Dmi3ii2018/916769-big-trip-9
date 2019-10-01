@@ -7,7 +7,7 @@ import {createRouteInfo} from "../src/components/data.js";
 import {render, Position} from "../src/utils.js";
 import {API} from "../src/api.js";
 
-const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=${Math.random()}`;
+const AUTHORIZATION = `Basic dXNlcfjhHSBwYXNzd29yZAo=${Math.random()}`;
 const END_POINT = `https://htmlacademy-es-9.appspot.com/big-trip/`;
 
 const api = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
@@ -45,7 +45,34 @@ eventsList.then((result) => {
   return tripController.init();
 });
 
-const onDataChange = () => {};
+export const onDataChange = (actionType, update) => {
+  switch (actionType) {
+    case `update`:
+      api.update({
+        id: update.id,
+        data: update.toRAW()
+      }).then((event) => {
+        const tripController = new TripController(taskContainer, event);
+        return tripController.init();
+      });
+      break;
+    case `delete`:
+      api.deleteEvent({
+        id: update.id
+      })
+        .then(() => api.getEvents())
+        .then((event) => {
+          console.log(event);
+          taskContainer.innerHTML = ``;
+          const tripController = new TripController(taskContainer, event);
+          tripController.init();
+          // tripController._renderDay(event, tripController.renderAllDays);
+        });
+      break;
+    case `default`:
+      api.getEvents();
+  }
+};
 
 const renderStats = new Stat();
 const statContainer = document.querySelector(`.page-body__page-main`).querySelector(`.page-body__container`);

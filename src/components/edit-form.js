@@ -103,25 +103,15 @@ export class EditForm extends AbstractComponent {
         <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
-          <div class="event__available-offers">
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${this._options.choosen ? `checked` : ``}>
-              <label class="event__offer-label" for="event-offer-luggage-1">
-                <span class="event__offer-title">${this._options.name}</span>
-                &plus;
-                &euro;&nbsp;<span class="event__offer-price">${this._options.price}</span>
-              </label>
-            </div>
-
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" ${this._options.choosen ? `` : `checked`}>
-              <label class="event__offer-label" for="event-offer-comfort-1">
-                <span class="event__offer-title">${this._options.name}</span>
-                &plus;
-                &euro;&nbsp;<span class="event__offer-price">${this._options.price}</span>
-              </label>
-            </div>
-
+          ${this._options.map((option) => `<div class="event__available-offers">
+          <div class="event__offer-selector">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.name}" type="checkbox" name="event-offer-luggage" ${option.choosen ? `checked` : ``}>
+            <label class="event__offer-label" for="event-offer-${option.name}">
+              <span class="event__offer-title">${option.name}</span>
+              &plus;
+              &euro;&nbsp;<span class="event__offer-price">${option.price}</span>
+            </label>
+          </div>`).join(``)}
           </div>
         </section>
 

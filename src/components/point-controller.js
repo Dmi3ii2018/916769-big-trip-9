@@ -2,6 +2,7 @@ import {TripEvent} from "../components/trip-event";
 import {EditForm} from "../components/edit-form";
 // import {NewEvent} from "../components/new-event.js";
 import {render, Position} from "../utils.js";
+import {onDataChange} from "../main.js";
 // import {createRoutePoint} from "../components/data.js";
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -13,13 +14,19 @@ const Mode = {
   DEFAULT: `default`,
 };
 
+const ActionType = {
+  CREATE: `create`,
+  UPDATE: `update`,
+  DELETE: `delete`
+};
+
 export class PointController {
   constructor(container, data, mode, onDataChange, onChangeView) {
     this._container = container;
     this._data = data;
 
     this._onChangeView = onChangeView;
-    this._onDataChange = onDataChange;
+    //this._onDataChange = onDataChange;
 
     this._tripEvent = new TripEvent(data);
     this._editForm = new EditForm(data);
@@ -117,11 +124,12 @@ export class PointController {
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
-    this._editForm.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, () => {
+    this._editForm.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, (evt) => {
+      evt.preventDefault();
       if (mode === Mode.ADDING) {
         this._onDataChange(null, null);
       } else {
-        this._onDataChange(null, this._data);
+        onDataChange(ActionType.DELETE, this._data);
       }
     });
 
