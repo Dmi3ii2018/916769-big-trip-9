@@ -7,13 +7,15 @@ import {createRouteInfo} from "../src/components/data.js";
 import {render, Position} from "../src/utils.js";
 import {API} from "../src/api.js";
 
-const AUTHORIZATION = `Basic dXNlcfjhHSBwYXNzd29yZAo=${Math.random()}`;
-const END_POINT = `https://htmlacademy-es-9.appspot.com/big-trip/`;
+// console.log(new Date(`30/09/19 07:57`).getMilliseconds());
+
+const AUTHORIZATION = `Basic dXNlcHSBxADkFwYXNzd29yZAo=${Math.random()}`;
+const END_POINT = `https://htmlacademy-es-9.appspot.com/big-trip`;
 
 const api = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
 export let eventsList = api.getEvents();
 console.log(api.getEvents());
-console.log(eventsList);
+// console.log(eventsList);
 
 const filterContainer = document.querySelector(`.trip-main__trip-controls`);
 const tripInfoContainer = document.querySelector(`.trip-main`);
@@ -39,20 +41,20 @@ eventsList.then((result) => renderTripInfo(createRouteInfo(result)));
 renderMenu();
 renderFilter();
 
-const taskContainer = document.querySelector(`.trip-events`);
+const eventContainer = document.querySelector(`.trip-events`);
 eventsList.then((result) => {
-  const tripController = new TripController(taskContainer, result);
+  const tripController = new TripController(eventContainer, result);
   return tripController.init();
 });
 
-export const onDataChange = (actionType, update) => {
+export const onDataChange = (actionType, update, newData) => {
   switch (actionType) {
     case `update`:
-      api.update({
+      api.updateEvent({
         id: update.id,
-        data: update.toRAW()
-      }).then((event) => {
-        const tripController = new TripController(taskContainer, event);
+        data: update.toRaw(newData)
+      }).then((result) => {
+        const tripController = new TripController(eventContainer, result);
         return tripController.init();
       });
       break;
@@ -61,16 +63,14 @@ export const onDataChange = (actionType, update) => {
         id: update.id
       })
         .then(() => api.getEvents())
-        .then((event) => {
-          console.log(event);
-          taskContainer.innerHTML = ``;
-          const tripController = new TripController(taskContainer, event);
+        .then((result) => {
+          console.log(result);
+          eventContainer.innerHTML = ``;
+          const tripController = new TripController(eventContainer, result);
           tripController.init();
           // tripController._renderDay(event, tripController.renderAllDays);
         });
       break;
-    case `default`:
-      api.getEvents();
   }
 };
 

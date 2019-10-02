@@ -97,7 +97,7 @@ export class PointController {
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
 
-        // const formData = new FormData(this._editForm.getElement().querySelector(`.event--edit`));
+        const formData = new FormData(this._editForm.getElement().querySelector(`.event--edit`));
 
         // const startTime = this._fp[0].parseDate(formData.get(`event-start-time`), `d.m.y H:i`);
         // const endTime = this._fp[0].parseDate(formData.get(`event-end-time`), `d.m.y H:i`);
@@ -119,7 +119,7 @@ export class PointController {
         //   options: createRoutePoint().options,
         // };
 
-        this._onDataChange(entry, mode === Mode.DEFAULT ? this._data : null);
+        onDataChange(ActionType.UPDATE, this._data, formData);
 
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
