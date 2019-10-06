@@ -9,13 +9,14 @@ import {API} from "../src/api.js";
 
 // console.log(new Date(`30/09/19 07:57`).getMilliseconds());
 
-const AUTHORIZATION = `Basic dXNlcHSBxADkFwYXNzd29yZAo=${Math.random()}`;
+const AUTHORIZATION = `Basic kTy3gI6d517rD`;
 const END_POINT = `https://htmlacademy-es-9.appspot.com/big-trip`;
 
 const api = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
 export let eventsList = api.getEvents();
+export let destinationData = api.getDestination();
+export let offersItems = api.getOffers();
 console.log(api.getEvents());
-// console.log(eventsList);
 
 const filterContainer = document.querySelector(`.trip-main__trip-controls`);
 const tripInfoContainer = document.querySelector(`.trip-main`);
@@ -49,11 +50,22 @@ eventsList.then((result) => {
 
 export const onDataChange = (actionType, update, newData) => {
   switch (actionType) {
+    case `create`:
+      api.createEvent(newData).then(() => api.getEvents())
+      .then((result) => {
+        console.log(result);
+        eventContainer.innerHTML = ``;
+        const tripController = new TripController(eventContainer, result);
+        tripController.init();
+      });
+      break;
     case `update`:
       api.updateEvent({
         id: update.id,
         data: update.toRaw(newData)
-      }).then((result) => {
+      });
+      api.getEvents().then((result) => {
+        eventContainer.innerHTML = ``;
         const tripController = new TripController(eventContainer, result);
         return tripController.init();
       });
@@ -71,6 +83,13 @@ export const onDataChange = (actionType, update, newData) => {
           // tripController._renderDay(event, tripController.renderAllDays);
         });
       break;
+    case `default`:
+      api.getEvents().then((result) => {
+        eventContainer.innerHTML = ``;
+        const tripController = new TripController(eventContainer, result);
+        return tripController.init();
+      });
+      break;
   }
 };
 
@@ -80,4 +99,3 @@ render(statContainer, renderStats.getElement(), Position.BEFOREEND);
 
 console.log(api.getDestination());
 console.log(api.getOffers());
-console.log(123);

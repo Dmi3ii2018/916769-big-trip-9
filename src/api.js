@@ -26,23 +26,28 @@ export const API = class {
   }
 
   getEvents() {
-    return this._load({url: `points `})
+    return this._load({url: `points`})
       .then(toJSON).
       then(ModelEvent.parseEvents);
+  }
+
+  getPureEvents() {
+    return this._load({url: `points`});
   }
 
   getDestination() {
     return this._load({url: `destinations`})
       .then(toJSON);
   }
+
   getOffers() {
     return this._load({url: `offers`})
       .then(toJSON);
   }
 
-  createEvent({event}) {
+  createEvent(event) {
     return this._load({
-      url: `points `,
+      url: `points`,
       method: Method.POST,
       body: JSON.stringify(event),
       headers: new Headers({'Content-Type': `application/json`})

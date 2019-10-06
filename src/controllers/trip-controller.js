@@ -5,8 +5,10 @@ import {PointController} from "../components/point-controller.js";
 import {Sort} from "../components/sort.js";
 import {Stat} from "../components/stat.js";
 import {Menu} from "../components/menu.js";
+import {eventsList} from "../main.js";
 import {Filter} from "../components/filter.js";
 import {render, Position, unrender} from "../utils.js";
+import {ModalEvent} from "../model-event.js";
 // import {createRoutePoint} from "../components/data.js";
 import {getStatistics} from "../stat-controller.js";
 import moment from "moment";
@@ -19,7 +21,7 @@ const Mode = {
 export class TripController {
   constructor(container, events) {
     this._container = container;
-    this._events = events;
+    this._events = events.sort((a, b) => a.date.start - b.date.start);
     this._tripDaysList = new TripDaysList();
     this.dayEventsList = new DayEventsList();
     this._sort = new Sort();
@@ -29,6 +31,7 @@ export class TripController {
     this.Day = new Day(1, this._events[0]);
 
     this._creatingEvent = null;
+    this.eventsList = null;
 
     this._subscriptions = [];
     this._onChangeView = this._onChangeView.bind(this);
@@ -53,7 +56,11 @@ export class TripController {
 
     this._sort.getElement().addEventListener(`change`, (evt) => this._onSortChange(evt));
 
-    document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => this._onNewTaskClick(evt));
+    document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => this._onNewEventClick(evt));
+
+    eventsList.then((result) => {
+      this._eventsList = result;
+    });
     // }
   }
 
@@ -73,7 +80,7 @@ export class TripController {
 
   _renderTripEvent(tripEventData) {
     const pointController = new PointController(this.dayEventsList, tripEventData, Mode.DEFAULT, this._onDataChange, this._onChangeView);
-    this._subscriptions.push(pointController.setDefaultView.bind(pointController));
+    this._subscriptions.unshift(pointController.setDefaultView.bind(pointController));
   }
 
   _onChangeView() {
@@ -119,8 +126,9 @@ export class TripController {
         break;
       }
       case `default`: {
-        eventData = this._events;
-        eventData.forEach((eventMock) => this.renderAllDays(eventMock));
+        eventData = this._events.slice().sort((a, b) => a.date.start - b.date.start);
+        this._renderDay(eventData, this.renderAllDays);
+        // eventData.forEach((eventMock) => this.renderAllDays(eventMock));
         break;
       }
     }
@@ -213,11 +221,21 @@ export class TripController {
     if (this._creatingEvent) {
       return;
     }
-    const defaultEvent = createRoutePoint();
-    this._creatingEvent = new PointController(this.dayEventsList, defaultEvent, Mode.ADDING, this._onDataChange, this._onChangeView);
+    const defaultEvent = {
+      tripType: [`Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`],
+      activity: [`Check-in`, `Sightseeing`, `Restaurant`],
+      date: {
+        start: null,
+        end: null,
+      },
+      id: String(this._eventsList.length),
+    };
+    const creatEvent = new PointController(this.dayEventsList, defaultEvent, Mode.ADDING, this._onDataChange, this._onChangeView);
+    this._subscriptions.push(creatEvent.setDefaultView.bind(creatEvent));
+    this._creatingEvent = creatEvent;
   }
 
-  _onNewTaskClick(evt) {
+  _onNewEventClick(evt) {
     evt.preventDefault();
     this._onChangeView();
     this.createEvent();
