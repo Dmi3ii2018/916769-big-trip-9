@@ -34,11 +34,11 @@ export class TripEvent extends AbstractComponent {
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">${this._options.choosen ? this._options.name : ``}</span>
-            ${this._options.choosen ? `&plus;&euro;` : ``}
-            &nbsp;<span class="event__offer-price">${this._options.choosen ? this._options.price : ``}</span>
-          </li>
+        ${this._options.filter((it) => it.choosen === true).map((option) => `<li class="event__offer">
+        <span class="event__offer-title">${this._options ? option.title : ``}</span>
+        ${this._options ? `&plus;&euro;` : ``}
+        &nbsp;<span class="event__offer-price">${this._options ? option.price : ``}</span>
+      </li>`).join(``)}
         </ul>
 
         <button class="event__rollup-btn" type="button">

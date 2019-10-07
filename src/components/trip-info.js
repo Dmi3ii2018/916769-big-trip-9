@@ -1,4 +1,5 @@
 import {AbstractComponent} from "./abstract-component.js";
+import moment from "moment";
 
 export class TripInfo extends AbstractComponent {
   constructor({cities, dateStart, dateEnd, cost}) {
@@ -15,9 +16,9 @@ export class TripInfo extends AbstractComponent {
       <h1 class="trip-info__title">${this._cities}</h1>
 
       <p class="trip-info__dates">
-        ${this._dateStart ? new Date(this._dateStart).toDateString() : ``}
+        ${this._dateStart ? moment(this._dateStart).format(`MMM DD`) : ``}
         ${this._dateStart ? `&nbsp;—&nbsp` : ``}
-        ${this._dateEnd ? new Date(this._dateEnd).toDateString() : ``}
+        ${this._dateEnd ? moment(this._dateEnd).format(`MMM DD`) : ``}
       </p>
     </div>
 
