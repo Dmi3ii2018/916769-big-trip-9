@@ -2,13 +2,11 @@ import {TripEvent} from "../components/trip-event";
 import {EditForm} from "../components/edit-form";
 import {DestinationList} from "../components/destination-list.js";
 import {DestinationDescription} from "../components/destination-description.js";
-// import {NewEvent} from "../components/new-event.js";
 import {render, Position, unrender} from "../utils.js";
 import {eventsList} from "../main.js";
 import {onDataChange} from "../main.js";
 import {destinationData} from "../main.js";
 import {offersItems} from "../main.js";
-// import {createRoutePoint} from "../components/data.js";
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
@@ -18,6 +16,7 @@ import {OffersList} from "./offers-list";
 const Mode = {
   ADDING: `adding`,
   DEFAULT: `default`,
+  DELETING: `deleting`
 };
 
 const ActionType = {
@@ -34,11 +33,9 @@ export class PointController {
     this.eventsList = null;
     this._entry = null;
     this._onChangeView = onChangeView;
-    // this._onDataChange = onDataChange;
 
     this._tripEvent = new TripEvent(data);
     this._editForm = new EditForm(data);
-    // this._newEvent = new NewEvent(data);
 
     this.init(mode);
     this._changeForm();
@@ -72,6 +69,7 @@ export class PointController {
       this._tripEvent.getElement().querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, () => {
         this._onChangeView();
+        // onDataChange(Mode.DEFAULT);
         this._editForm.getElement().querySelector(`.event__reset-btn`).textContent = `Delete`;
         this._editForm.getElement().querySelector(`.event__favorite-btn`).classList.remove(`visually-hidden`);
         this._editForm.getElement().querySelector(`.event__rollup-btn`).style = `display: block`;
@@ -99,7 +97,6 @@ export class PointController {
 
     this._fp = flatpickr(this._editForm.getElement().querySelectorAll(`.event__input--time`), {
       allowInput: true,
-      // minDate: `today`,
       dateFormat: `d/m/y H:i`,
       enableTime: true,
     });
@@ -117,6 +114,45 @@ export class PointController {
     this._editForm.getElement().querySelector(`.event__save-btn`)
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
+        let isSomeInputInvalid = false;
+        this.block();
+
+        const load = (isSuccess) => {
+          return new Promise((res, rej) => {
+            setTimeout(isSuccess ? res : rej, 500);
+          });
+        };
+
+        const setValidity = () => {
+          let inputs = this._editForm.getElement().querySelectorAll(`.event__input `);
+          for (let i = 0; i < inputs.length; i++) {
+
+            let input = inputs[i];
+            if (input.checkValidity() === false) {
+              isSomeInputInvalid = true;
+              input.style.borderBottom = `1px solid red`;
+              this._editForm.getElement().style.border = `1px solid red`;
+            }
+          }
+        };
+
+        load(true)
+          .then(() => {
+
+            this.unblock();
+          })
+          .catch(() => {
+            this.shake();
+            this._editForm.getElement().style.border = `2px solid red`;
+            this.unblock();
+          });
+
+        setValidity();
+
+        if (isSomeInputInvalid) {
+          return;
+        }
+
         const formData = new FormData(this._editForm.getElement().querySelector(`.event--edit`));
 
         this.resetOptions();
@@ -131,11 +167,6 @@ export class PointController {
             src: picture.src,
             description: picture.alt,
           }));
-          // console.log(picturesData);
-          // console.log(offersData);
-
-          // const startTime = this._fp[0].parseDate(formData.get(`event-start-time`), `d.m.y H:i`);
-          // const endTime = this._fp[0].parseDate(formData.get(`event-end-time`), `d.m.y H:i`);
 
           this._entry = {
             'base_price': Number(formData.get(`event-price`)),
@@ -143,8 +174,8 @@ export class PointController {
             'date_to': Number(moment(formData.get(`event-end-time`), `DD/MM/YY HH:mm`).format(`x`)),
             'destination': {
               'name': formData.get(`event-destination`),
-              'pictures': picturesData, // rewrite
-              'description': eventDescription || ``, // rewrite
+              'pictures': picturesData,
+              'description': eventDescription || ``,
             },
             'id': String(this._eventsList.length),
             'is_favorite': formData.get(`event-favorite`) ? true : false,
@@ -156,28 +187,42 @@ export class PointController {
             'type': formData.get(`event-type`) ? formData.get(`event-type`).toLowerCase() : document.querySelector(`.event__type-toggle`).value,
           };
 
-          // console.log(this._entry);
           onDataChange(ActionType.CREATE, this._data, this._entry);
 
         } else {
           onDataChange(ActionType.UPDATE, this._data, formData);
         }
 
-        // this._onChangeView();
-
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
     this._editForm.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, (evt) => {
       evt.preventDefault();
-      // console.log(this._data);
-      if (mode === Mode.ADDING) {
-        // unrender(this._editForm.getElement());
-        // this._editForm.removeElement();
-        onDataChange(Mode.DEFAULT);
-      } else {
-        onDataChange(ActionType.DELETE, this._data);
-      }
+
+      const load = (isSuccess) => {
+        return new Promise((res, rej) => {
+          setTimeout(isSuccess ? res : rej, 500);
+        });
+      };
+
+      this.block(Mode.DELETING);
+
+      load(true)
+          .then(() => {
+
+            this.unblock();
+            if (mode === Mode.ADDING) {
+              onDataChange(Mode.DEFAULT);
+            } else {
+              onDataChange(ActionType.DELETE, this._data);
+            }
+          })
+          .catch(() => {
+            this.shake();
+            this._editForm.getElement().style.border = `2px solid red`;
+            this.unblock();
+          });
+
     });
 
     if (mode === Mode.ADDING) {
@@ -256,7 +301,7 @@ export class PointController {
     let destination;
     if (!evt) {
       destination = {
-        description: this._data.description,
+        description: this._data.description || ``,
         pictures: this._data.cityImages,
       };
       this.destinationDescription = new DestinationDescription(destination);
@@ -295,26 +340,15 @@ export class PointController {
         this.offerList = new OffersList({offers: offersData[0].offers});
         render(offerContainer, this.offerList.getElement(), Position.AFTERBEGIN);
         this._data.options = offersData[0].offers;
-        // this._editForm.getElement().querySelectorAll(`.event__section--offers`)
-        //   .addEventListener(`change`, (event) => this.onOptionClick(event));
       }
       );
-    }
-  }
-
-  onOptionClick() {
-    if (event.target === `INPUT`) {
-      // console.log(event.target);
-      // this._data.options.map((option) => );
     }
   }
 
   resetOptions() {
     const choosenOptions = Array.from(this._editForm.getElement().querySelectorAll(`.event__offer-checkbox`))
           .filter((it) => it.checked === true);
-    // console.log(choosenOptions);
 
-    // const tripTypeOffer = this._offersData.filter((it) => it.type === formData.get(`event-type`).toLowerCase());
     if (this._data.options) {
       this._data.options.forEach((offer) => {
         if (choosenOptions.some((it) => offer.title === it.dataset.offerName)) {
@@ -326,8 +360,30 @@ export class PointController {
     } else {
       return;
     }
+  }
 
-    // console.log(this._data);
+  block(mode) {
+    this._editForm.getElement().querySelector(`.event--edit`).disabled = true;
+    if (mode === Mode.DELETING) {
+      this._editForm.getElement().querySelector(`.event__reset-btn`).textContent = `Deleting`;
+    } else {
+      this._editForm.getElement().querySelector(`.event__save-btn`).textContent = `Saving`;
+    }
+  }
+
+  unblock() {
+    this._editForm.getElement().querySelector(`.event--edit`).disabled = false;
+    this._editForm.getElement().querySelector(`.event__save-btn`).textContent = `Save`;
+    this._editForm.getElement().querySelector(`.event__reset-btn`).textContent = `Delete`;
+  }
+
+  shake() {
+    const ANIMATION_TIMEOUT = 600;
+    this._editForm.getElement().style.animation = `shake ${ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._editForm.getElement().style.animation = ``;
+    }, ANIMATION_TIMEOUT);
   }
 }
 

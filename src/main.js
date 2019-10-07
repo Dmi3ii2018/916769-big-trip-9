@@ -7,16 +7,13 @@ import {createRouteInfo} from "../src/components/data.js";
 import {render, Position, unrender} from "../src/utils.js";
 import {API} from "../src/api.js";
 
-// console.log(new Date(`30/09/19 07:57`).getMilliseconds());
-
 const AUTHORIZATION = `Basic kTy3gI4d517rD`;
 const END_POINT = `https://htmlacademy-es-9.appspot.com/big-trip`;
 
 const api = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
-export let eventsList = api.getEvents();
-export let destinationData = api.getDestination();
-export let offersItems = api.getOffers();
-// console.log(api.getEvents());
+export const eventsList = api.getEvents();
+export const destinationData = api.getDestination();
+export const offersItems = api.getOffers();
 
 const filterContainer = document.querySelector(`.trip-main__trip-controls`);
 const tripInfoContainer = document.querySelector(`.trip-main`);
@@ -36,7 +33,6 @@ const renderFilter = () => {
   const filter = new Filter();
   render(filterContainer, filter.getElement(), Position.BEFOREEND);
 };
-
 
 eventsList.then((result) => renderTripInfo(createRouteInfo(result)));
 renderMenu();
@@ -60,7 +56,6 @@ export const onDataChange = (actionType, update, newData) => {
     case `create`:
       api.createEvent(newData).then(() => api.getEvents())
       .then((result) => {
-        // console.log(result);
         eventContainer.innerHTML = ``;
         tripController = new TripController(eventContainer, result);
         tripController.init();
@@ -72,7 +67,6 @@ export const onDataChange = (actionType, update, newData) => {
         data: update.toRaw(newData)
       }).then(() => api.getEvents())
           .then((result) => {
-            // console.log(result);
             eventContainer.innerHTML = ``;
             tripController = new TripController(eventContainer, result);
             tripController.init();
@@ -87,7 +81,6 @@ export const onDataChange = (actionType, update, newData) => {
           eventContainer.innerHTML = ``;
           tripController = new TripController(eventContainer, result);
           tripController.init();
-          // tripController._renderDay(event, tripController.renderAllDays);
         });
       break;
     case `default`:
@@ -103,6 +96,3 @@ export const onDataChange = (actionType, update, newData) => {
 const renderStats = new Stat();
 const statContainer = document.querySelector(`.page-body__page-main`).querySelector(`.page-body__container`);
 render(statContainer, renderStats.getElement(), Position.BEFOREEND);
-
-// console.log(api.getDestination());
-// console.log(api.getOffers());

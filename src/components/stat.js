@@ -6,15 +6,15 @@ export class Stat extends AbstractComponent {
       <h2 class="visually-hidden">Trip statistics</h2>
 
       <div class="statistics__item statistics__item--money">
-        <canvas class="statistics__chart  statistics__chart--money" width="900" height="250"></canvas>
+        <canvas class="statistics__chart  statistics__chart--money" width="900" height="350"></canvas>
       </div>
 
       <div class="statistics__item statistics__item--transport">
-        <canvas class="statistics__chart  statistics__chart--transport" width="900" height="250"></canvas>
+        <canvas class="statistics__chart  statistics__chart--transport" width="900" height="350"></canvas>
       </div>
 
       <div class="statistics__item statistics__item--time-spend">
-        <canvas class="statistics__chart  statistics__chart--time" width="900" height="250"></canvas>
+        <canvas class="statistics__chart  statistics__chart--time" width="900" height="350"></canvas>
       </div>
     </section>`;
   }
