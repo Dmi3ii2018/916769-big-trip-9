@@ -6,9 +6,10 @@ import {Sort} from "../components/sort.js";
 import {Stat} from "../components/stat.js";
 import {Menu} from "../components/menu.js";
 import {eventsList} from "../main.js";
+// import {onDataChange} from "../main.js";
 import {Filter} from "../components/filter.js";
 import {render, Position, unrender} from "../utils.js";
-import {ModalEvent} from "../model-event.js";
+// import {ModalEvent} from "../model-event.js";
 // import {createRoutePoint} from "../components/data.js";
 import {getStatistics} from "../stat-controller.js";
 import moment from "moment";
@@ -237,7 +238,7 @@ export class TripController {
 
   _onNewEventClick(evt) {
     evt.preventDefault();
-    this._onChangeView();
+    this._renderDay(this._events, this.renderAllDays);
     this.createEvent();
   }
 

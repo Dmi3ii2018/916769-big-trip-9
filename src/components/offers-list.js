@@ -12,7 +12,7 @@ export class OffersList extends AbstractComponent {
 
           ${this._offers.map((option) => `<div class="event__available-offers">
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox visually-hidden" id="event-offer-${option.title}" type="checkbox" name="event-offer-luggage" ${option.choosen ? `checked` : ``}>
+            <input class="event__offer-checkbox visually-hidden" data-offer-name="${option.title}" id="event-offer-${option.title}" type="checkbox" name="event-offer-luggage" ${option.choosen ? `checked` : ``}>
             <label class="event__offer-label" for="event-offer-${option.title}">
               <span class="event__offer-title">${option.title}</span>
               &plus;

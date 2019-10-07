@@ -27,14 +27,14 @@ const ActionType = {
 };
 
 export class PointController {
-  constructor(container, data, mode, onDataChange, onChangeView) {
+  constructor(container, data, mode, onChangeView) {
     this._container = container;
     this._data = data;
     this._offersData = null;
     this.eventsList = null;
     this._entry = null;
     this._onChangeView = onChangeView;
-    //this._onDataChange = onDataChange;
+    // this._onDataChange = onDataChange;
 
     this._tripEvent = new TripEvent(data);
     this._editForm = new EditForm(data);
@@ -49,6 +49,13 @@ export class PointController {
     let renderPosition = Position.BEFOREEND;
     let currentView = this._tripEvent;
 
+    offersItems.then((result) => {
+      this._offersData = result;
+    });
+    eventsList.then((result) => {
+      this._eventsList = result;
+    });
+
     if (mode === Mode.ADDING) {
       renderPosition = Position.AFTERBEGIN;
       currentView = this._editForm;
@@ -56,12 +63,8 @@ export class PointController {
       currentView.getElement().querySelector(`.event__input--price`).value = ``;
       currentView.getElement().querySelector(`.event__favorite-btn`).classList.add(`visually-hidden`);
       currentView.getElement().querySelector(`.event__rollup-btn`).style = `display: none`;
-      offersItems.then((result) => {
-        this._offersData = result;
-      });
-      eventsList.then((result) => {
-        this._eventsList = result;
-      });
+      this._checkPlaceholder(true);
+
     } else {
       this._checkDuration();
       this._checkPlaceholder();
@@ -116,18 +119,20 @@ export class PointController {
         evt.preventDefault();
         const formData = new FormData(this._editForm.getElement().querySelector(`.event--edit`));
 
+        this.resetOptions();
+
         if (mode === Mode.ADDING) {
 
           const imagesList = Array.from(this._editForm.getElement().querySelectorAll(`.event__photo`));
-          const eventDescription = this._editForm.getElement().querySelector(`.event__destination-description`).textContent;
-          let offersData = this._offersData.filter((it) => it.type === formData.get(`event-type`).toLowerCase());
+          const eventDescription = this._editForm.getElement().querySelector(`.event__destination-description`) ? this._editForm.getElement().querySelector(`.event__destination-description`).textContent : ``;
+          let offersData = this._offersData.filter((it) => it.type === formData.get(`event-type`) ? formData.get(`event-type`).toLowerCase() : document.querySelector(`.event__type-toggle`).value);
 
           const picturesData = imagesList.map((picture) => ({
             src: picture.src,
             description: picture.alt,
           }));
-          console.log(picturesData);
-          console.log(offersData);
+          // console.log(picturesData);
+          // console.log(offersData);
 
           // const startTime = this._fp[0].parseDate(formData.get(`event-start-time`), `d.m.y H:i`);
           // const endTime = this._fp[0].parseDate(formData.get(`event-end-time`), `d.m.y H:i`);
@@ -139,7 +144,7 @@ export class PointController {
             'destination': {
               'name': formData.get(`event-destination`),
               'pictures': picturesData, // rewrite
-              'description': eventDescription, // rewrite
+              'description': eventDescription || ``, // rewrite
             },
             'id': String(this._eventsList.length),
             'is_favorite': formData.get(`event-favorite`) ? true : false,
@@ -150,19 +155,22 @@ export class PointController {
             })),
             'type': formData.get(`event-type`) ? formData.get(`event-type`).toLowerCase() : document.querySelector(`.event__type-toggle`).value,
           };
-          console.log(this._entry);
+
+          // console.log(this._entry);
           onDataChange(ActionType.CREATE, this._data, this._entry);
+
         } else {
           onDataChange(ActionType.UPDATE, this._data, formData);
         }
-        this._onChangeView();
+
+        // this._onChangeView();
 
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
     this._editForm.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, (evt) => {
       evt.preventDefault();
-      console.log(this._data);
+      // console.log(this._data);
       if (mode === Mode.ADDING) {
         // unrender(this._editForm.getElement());
         // this._editForm.removeElement();
@@ -185,7 +193,7 @@ export class PointController {
   }
 
   _checkPlaceholder(evt = null) {
-    const placeholder = this._editForm.getElement().querySelector(`.event__label`).textContent.trim();
+    const placeholder = this._editForm.getElement().querySelector(`.event__label`).textContent.trim() || this._editForm.getElement().querySelector(`.event__type-toggle`).value;
     const destination = this._editForm.getElement().querySelector(`.event__input--destination`).value;
 
     let prep;
@@ -284,11 +292,11 @@ export class PointController {
       }
       offersItems.then((result) => {
         offersData = result.filter((it) => it.type === evt.target.value.toLowerCase());
-        this.offerList = new OffersList({offers: offersData[0].offers}, this.onOptionClick);
+        this.offerList = new OffersList({offers: offersData[0].offers});
         render(offerContainer, this.offerList.getElement(), Position.AFTERBEGIN);
         this._data.options = offersData[0].offers;
-        this._editForm.getElement().querySelector(`.event__section--offers`)
-          .addEventListener(`change`, (event) => this.onOptionClick(event));
+        // this._editForm.getElement().querySelectorAll(`.event__section--offers`)
+        //   .addEventListener(`change`, (event) => this.onOptionClick(event));
       }
       );
     }
@@ -296,9 +304,30 @@ export class PointController {
 
   onOptionClick() {
     if (event.target === `INPUT`) {
-      console.log(event.target);
+      // console.log(event.target);
       // this._data.options.map((option) => );
     }
+  }
+
+  resetOptions() {
+    const choosenOptions = Array.from(this._editForm.getElement().querySelectorAll(`.event__offer-checkbox`))
+          .filter((it) => it.checked === true);
+    // console.log(choosenOptions);
+
+    // const tripTypeOffer = this._offersData.filter((it) => it.type === formData.get(`event-type`).toLowerCase());
+    if (this._data.options) {
+      this._data.options.forEach((offer) => {
+        if (choosenOptions.some((it) => offer.title === it.dataset.offerName)) {
+          offer.choosen = true;
+        } else {
+          offer.choosen = false;
+        }
+      });
+    } else {
+      return;
+    }
+
+    // console.log(this._data);
   }
 }
 

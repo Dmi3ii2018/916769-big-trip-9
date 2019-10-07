@@ -33,15 +33,6 @@ export class ModelEvent {
   }
 
   toRaw(newData) {
-    // console.log(new Date(1549785360000));
-    // console.log(new Date(newData.get(`event-start-time`)));
-    // console.log(moment(newData.get(`event-start-time`), `DD/MM/YY HH:mm`));
-    // console.log(moment(newData.get(`event-start-time`), `DD/MM/YY HH:mm`).format(`x`));
-    // console.log(new Date(1570071300000));
-    // console.log(newData.get(`event-start-time`));
-    // console.log(newData.get(`02/10/19 12:56`));
-    // console.log(moment(newData.get(`02/10/19`, `L`)));
-    // console.log(moment(newData.get(`02/10/19`, `MM/DD/YY`)));
     let entry = {
       'base_price': Number(newData.get(`event-price`)),
       'date_from': Number(moment(newData.get(`event-start-time`), `DD/MM/YY HH:mm`).format(`x`)),
