@@ -34,7 +34,7 @@ export class TripEvent extends AbstractComponent {
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-        ${this._options.filter((it) => it.choosen === true).map((option) => `<li class="event__offer">
+        ${this._options.filter((it) => it.choosen === true).slice(0, 3).map((option) => `<li class="event__offer">
         <span class="event__offer-title">${this._options ? option.title : ``}</span>
         ${this._options ? `&plus;&euro;` : ``}
         &nbsp;<span class="event__offer-price">${this._options ? option.price : ``}</span>

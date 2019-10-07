@@ -6,11 +6,8 @@ import {Sort} from "../components/sort.js";
 import {Stat} from "../components/stat.js";
 import {Menu} from "../components/menu.js";
 import {eventsList} from "../main.js";
-// import {onDataChange} from "../main.js";
 import {Filter} from "../components/filter.js";
 import {render, Position, unrender} from "../utils.js";
-// import {ModalEvent} from "../model-event.js";
-// import {createRoutePoint} from "../components/data.js";
 import {getStatistics} from "../stat-controller.js";
 import moment from "moment";
 
@@ -36,33 +33,36 @@ export class TripController {
 
     this._subscriptions = [];
     this._onChangeView = this._onChangeView.bind(this);
-    // this._onDataChange = this._onDataChange.bind(this);
   }
 
   init() {
-    // if (this._events.length === 0) {
-    //   const newEvent = new NewEvent(createRoutePoint());
-    //   render(this._container, newEvent.getElement(), Position.AFTERBEGIN);
-    // } else {
-    render(this._container, this._sort.getElement(), Position.BEFOREEND);
-    render(this._container, this._tripDaysList.getElement(), Position.BEFOREEND);
-    render(this._tripDaysList.getElement(), this.Day.getElement(), Position.BEFOREEND);
-    render(this.Day.getElement(), this.dayEventsList.getElement(), Position.BEFOREEND);
+    if (this._events.length === 0) {
+      let pastText = `Click New Event to create your first point`;
+      unrender(this._tripDaysList.getElement());
+      this._tripDaysList.removeElement();
+      this._tripDaysList.getElement().setAttribute(`style`, `padding-top: 40px; text-align: center;`);
+      render(this._container, this._tripDaysList.getElement(), Position.BEFOREEND);
+      render(this._tripDaysList.getElement(), pastText, Position.BEFOREEND);
+    } else {
+      render(this._container, this._sort.getElement(), Position.BEFOREEND);
+      render(this._container, this._tripDaysList.getElement(), Position.BEFOREEND);
+      render(this._tripDaysList.getElement(), this.Day.getElement(), Position.BEFOREEND);
+      render(this.Day.getElement(), this.dayEventsList.getElement(), Position.BEFOREEND);
 
-    this._events.forEach((it) => this.renderAllDays(it));
+      this._events.forEach((it) => this.renderAllDays(it));
 
-    document.querySelector(`.trip-controls__trip-tabs`).addEventListener(`click`, (evt) => this._onMenuClick(evt));
+      document.querySelector(`.trip-controls__trip-tabs`).addEventListener(`click`, (evt) => this._onMenuClick(evt));
 
-    document.querySelector(`.trip-filters`).addEventListener(`change`, (evt) => this._onFilterClick(evt));
+      document.querySelector(`.trip-filters`).addEventListener(`change`, (evt) => this._onFilterClick(evt));
 
-    this._sort.getElement().addEventListener(`change`, (evt) => this._onSortChange(evt));
+      this._sort.getElement().addEventListener(`change`, (evt) => this._onSortChange(evt));
 
-    document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => this._onNewEventClick(evt));
+      document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => this._onNewEventClick(evt));
 
-    eventsList.then((result) => {
-      this._eventsList = result;
-    });
-    // }
+      eventsList.then((result) => {
+        this._eventsList = result;
+      });
+    }
   }
 
   _renderDay(tripEvents, callback) {
@@ -80,29 +80,13 @@ export class TripController {
   }
 
   _renderTripEvent(tripEventData) {
-    const pointController = new PointController(this.dayEventsList, tripEventData, Mode.DEFAULT, this._onDataChange, this._onChangeView);
+    const pointController = new PointController(this.dayEventsList, tripEventData, Mode.DEFAULT, this._onChangeView);
     this._subscriptions.unshift(pointController.setDefaultView.bind(pointController));
   }
 
   _onChangeView() {
     this._subscriptions.forEach((it) => it());
   }
-
-  // _onDataChange(newData, oldData) {
-  //   const index = this._events.findIndex((it) => it === oldData);
-  //   if (newData === null && oldData === null) {
-  //     this._creatingEvent = null;
-  //   } else if (newData === null) {
-  //     this._events = [...this._events.slice(0, index), ...this._events.slice(index + 1)];
-  //   } else if (oldData === null) {
-  //     this._creatingEvent = null;
-  //     this._events = [newData, ...this._events];
-  //   } else {
-  //     this._events[index] = newData;
-  //   }
-  //   this._events = this._events.sort((a, b) => a.date.start - b.date.start);
-  //   this._renderDay(this._events, this.renderAllDays);
-  // }
 
   _onSortChange(evt) {
     evt.preventDefault();
@@ -129,7 +113,6 @@ export class TripController {
       case `default`: {
         eventData = this._events.slice().sort((a, b) => a.date.start - b.date.start);
         this._renderDay(eventData, this.renderAllDays);
-        // eventData.forEach((eventMock) => this.renderAllDays(eventMock));
         break;
       }
     }
@@ -182,7 +165,7 @@ export class TripController {
 
     switch (evt.target.dataset.filterType) {
       case `future`: {
-        eventData = this._events.filter((it) => it.date.start > currentTime);
+        eventData = this._events.filter((it) => it.date.start > currentTime).sort((a, b) => a.date.start - b.date.start);
         if (eventData.length === 0) {
           let pastText = `There is no events of future`;
           unrender(this._tripDaysList.getElement());
@@ -196,7 +179,7 @@ export class TripController {
         break;
       }
       case `past`: {
-        eventData = this._events.filter((it) => it.date.end < currentTime);
+        eventData = this._events.filter((it) => it.date.end < currentTime).sort((a, b) => a.date.start - b.date.start);
         if (eventData.length === 0) {
           let pastText = `There is no events of past`;
           unrender(this._tripDaysList.getElement());
@@ -232,13 +215,12 @@ export class TripController {
       id: String(this._eventsList.length),
     };
     const creatEvent = new PointController(this.dayEventsList, defaultEvent, Mode.ADDING, this._onDataChange, this._onChangeView);
-    this._subscriptions.push(creatEvent.setDefaultView.bind(creatEvent));
+    this._subscriptions.unshift(creatEvent.setDefaultView.bind(creatEvent));
     this._creatingEvent = creatEvent;
   }
 
   _onNewEventClick(evt) {
     evt.preventDefault();
-    this._renderDay(this._events, this.renderAllDays);
     this.createEvent();
   }
 

@@ -6,13 +6,7 @@ export class Day extends AbstractComponent {
     super();
     this._counter = counter;
     this._date = date;
-    // this.time();
   }
-
-  // time() {
-  //   console.log(moment(this._date.start).format(`MMMM DD`));
-  //   console.log(new Date(this._date.start));
-  // }
 
   getTemplate() {
     return `<li class="trip-days__item  day">

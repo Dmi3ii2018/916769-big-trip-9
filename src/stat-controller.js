@@ -4,6 +4,7 @@ import {eventsList} from "../src/main.js";
 
 const getLabelList = (eventsData) => {
   let choosenTrip = eventsData.map((it) => it.choosenTripType);
+
   return Array.from(new Set(choosenTrip));
 };
 
@@ -40,14 +41,14 @@ const createTimeSpentData = (eventsData) => {
   return arr.map((it) => Math.round(it / 1000 / 60 / 60));
 };
 
-const moneyChart = (moneyCtx) => new Chart(moneyCtx, {
+const moneyChart = (moneyCtx, data) => new Chart(moneyCtx, {
   plugins: [ChartDataLabels],
   type: `horizontalBar`,
   data: {
-    labels: eventsList.then((result) => getLabelList(result)),
+    labels: getLabelList(data),
     datasets: [{
       label: ``,
-      data: eventsList.then((result) => createMoneyData(result)),
+      data: createMoneyData(data),
       backgroundColor: `rgba(255, 255, 255, 1)`,
       borderWidth: 1
     }]
@@ -113,14 +114,14 @@ const moneyChart = (moneyCtx) => new Chart(moneyCtx, {
   }
 });
 
-const transportChart = (transprotCtx) => new Chart(transprotCtx, {
+const transportChart = (transprotCtx, data) => new Chart(transprotCtx, {
   plugins: [ChartDataLabels],
   type: `horizontalBar`,
   data: {
-    labels: eventsList.then((result) => getLabelList(result)),
+    labels: getLabelList(data),
     datasets: [{
       label: ``,
-      data: eventsList.then((result) => createTransportData(result)),
+      data: createTransportData(data),
       backgroundColor: `rgba(255, 255, 255, 1)`,
       borderWidth: 1
     }]
@@ -187,14 +188,14 @@ const transportChart = (transprotCtx) => new Chart(transprotCtx, {
   }
 });
 
-const timeSpentChart = (transprotCtx) => new Chart(transprotCtx, {
+const timeSpentChart = (transprotCtx, data) => new Chart(transprotCtx, {
   plugins: [ChartDataLabels],
   type: `horizontalBar`,
   data: {
-    labels: eventsList.then((result) => getLabelList(result)),
+    labels: getLabelList(data),
     datasets: [{
       label: ``,
-      data: eventsList.then((result) => createTimeSpentData(result)),
+      data: createTimeSpentData(data),
       backgroundColor: `rgba(255, 255, 255, 1)`,
       borderWidth: 1
     }]
@@ -263,7 +264,9 @@ const timeSpentChart = (transprotCtx) => new Chart(transprotCtx, {
 });
 
 export const getStatistics = (moneyCtx, transportCtx, timeSpentCtx) => {
-  moneyChart(moneyCtx);
-  transportChart(transportCtx);
-  timeSpentChart(timeSpentCtx);
+  eventsList.then((result) => {
+    moneyChart(moneyCtx, result);
+    transportChart(transportCtx, result);
+    timeSpentChart(timeSpentCtx, result);
+  });
 };
