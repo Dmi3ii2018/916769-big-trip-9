@@ -1,6 +1,6 @@
-import {AbstractComponent} from "./abstract-component";
+import AbstractComponent from "./abstract-component";
 
-export class DestinationList extends AbstractComponent {
+export default class DestinationList extends AbstractComponent {
   constructor(data) {
     super();
     this.destinationList = data.map((destination) => destination.name);

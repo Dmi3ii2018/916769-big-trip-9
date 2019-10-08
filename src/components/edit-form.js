@@ -1,7 +1,7 @@
-import {AbstractComponent} from "./abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 import moment from "moment";
 
-export class EditForm extends AbstractComponent {
+export default class EditForm extends AbstractComponent {
   constructor({tripType, activity, choosenTripType, isFavorite, tripTypeImage, cityName, cityDestination, cityImages, description, date, price, options}) {
     super();
     this._tripType = tripType;

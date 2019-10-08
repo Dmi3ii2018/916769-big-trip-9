@@ -1,6 +1,6 @@
-import {AbstractComponent} from "./abstract-component";
+import AbstractComponent from "./abstract-component";
 
-export class OffersList extends AbstractComponent {
+export default class OffersList extends AbstractComponent {
   constructor({offers}) {
     super();
     this._offers = offers;

@@ -1,7 +1,7 @@
-import {TripEvent} from "../components/trip-event";
-import {EditForm} from "../components/edit-form";
-import {DestinationList} from "../components/destination-list.js";
-import {DestinationDescription} from "../components/destination-description.js";
+import TripEvent from "../components/trip-event";
+import EditForm from "../components/edit-form";
+import DestinationList from "../components/destination-list.js";
+import DestinationDescription from "../components/destination-description.js";
 import {render, Position, unrender} from "../utils.js";
 import {eventsList} from "../main.js";
 import {onDataChange} from "../main.js";
@@ -11,7 +11,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
 import moment from "moment";
-import {OffersList} from "./offers-list";
+import OffersList from "../components/offers-list";
 
 const Mode = {
   ADDING: `adding`,
@@ -25,7 +25,7 @@ const ActionType = {
   DELETE: `delete`
 };
 
-export class PointController {
+export default class PointController {
   constructor(container, data, mode, onChangeView) {
     this._container = container;
     this._data = data;

@@ -1,8 +1,8 @@
-import {Menu} from "../src/components/menu.js";
-import {Filter} from "../src/components/filter.js";
-import {Stat} from "../src/components/stat.js";
-import {TripController} from "../src/controllers/trip-controller.js";
-import {TripInfo} from "../src/components/trip-info.js";
+import Menu from "../src/components/menu.js";
+import Filter from "../src/components/filter.js";
+import Stat from "../src/components/stat.js";
+import TripController from "../src/controllers/trip-controller.js";
+import TripInfo from "../src/components/trip-info.js";
 import {createRouteInfo} from "../src/components/data.js";
 import {render, Position, unrender} from "../src/utils.js";
 import {API} from "../src/api.js";

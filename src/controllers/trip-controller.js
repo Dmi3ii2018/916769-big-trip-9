@@ -1,12 +1,12 @@
-import {TripDaysList} from "../components/trip-day-list.js";
-import {Day} from "../components/trip-day.js";
-import {DayEventsList} from "../components/day-events-list.js";
-import {PointController} from "../components/point-controller.js";
-import {Sort} from "../components/sort.js";
-import {Stat} from "../components/stat.js";
-import {Menu} from "../components/menu.js";
+import TripDaysList from "../components/trip-day-list.js";
+import Day from "../components/trip-day.js";
+import DayEventsList from "../components/day-events-list.js";
+import PointController from "../controllers/point-controller.js";
+import Sort from "../components/sort.js";
+import Stat from "../components/stat.js";
+import Menu from "../components/menu.js";
 import {eventsList} from "../main.js";
-import {Filter} from "../components/filter.js";
+import Filter from "../components/filter.js";
 import {render, Position, unrender} from "../utils.js";
 import {getStatistics} from "../stat-controller.js";
 import moment from "moment";
@@ -16,7 +16,7 @@ const Mode = {
   DEFAULT: `default`,
 };
 
-export class TripController {
+export default class TripController {
   constructor(container, events) {
     this._container = container;
     this._events = events.sort((a, b) => a.date.start - b.date.start);

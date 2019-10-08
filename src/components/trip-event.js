@@ -1,7 +1,7 @@
-import {AbstractComponent} from "./abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 import moment from "moment";
 
-export class TripEvent extends AbstractComponent {
+export default class TripEvent extends AbstractComponent {
   constructor({choosenTripType, tripTypeImage, date, price, options}) {
     super();
     this._choosenTripType = choosenTripType;
