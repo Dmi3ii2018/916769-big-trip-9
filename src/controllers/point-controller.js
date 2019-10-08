@@ -32,6 +32,7 @@ export default class PointController {
     this._offersData = null;
     this.eventsList = null;
     this._entry = null;
+    this.isSomeInputInvalid = false;
     this._onChangeView = onChangeView;
 
     this._tripEvent = new TripEvent(data);
@@ -69,7 +70,6 @@ export default class PointController {
       this._tripEvent.getElement().querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, () => {
         this._onChangeView();
-        // onDataChange(Mode.DEFAULT);
         this._editForm.getElement().querySelector(`.event__reset-btn`).textContent = `Delete`;
         this._editForm.getElement().querySelector(`.event__favorite-btn`).classList.remove(`visually-hidden`);
         this._editForm.getElement().querySelector(`.event__rollup-btn`).style = `display: block`;
@@ -114,7 +114,7 @@ export default class PointController {
     this._editForm.getElement().querySelector(`.event__save-btn`)
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
-        let isSomeInputInvalid = false;
+        this.isSomeInputInvalid = false;
         this.block();
 
         const load = (isSuccess) => {
@@ -123,33 +123,19 @@ export default class PointController {
           });
         };
 
-        const setValidity = () => {
-          let inputs = this._editForm.getElement().querySelectorAll(`.event__input `);
-          for (let i = 0; i < inputs.length; i++) {
+        this.setValidity();
 
-            let input = inputs[i];
-            if (input.checkValidity() === false) {
-              isSomeInputInvalid = true;
-              input.style.borderBottom = `1px solid red`;
-              this._editForm.getElement().style.border = `1px solid red`;
-            }
-          }
-        };
-
-        load(true)
+        load(!this.isSomeInputInvalid)
           .then(() => {
-
             this.unblock();
           })
           .catch(() => {
             this.shake();
-            this._editForm.getElement().style.border = `2px solid red`;
+            this._editForm.getElement().style.border = `1px solid red`;
             this.unblock();
           });
 
-        setValidity();
-
-        if (isSomeInputInvalid) {
+        if (this.isSomeInputInvalid) {
           return;
         }
 
@@ -158,35 +144,7 @@ export default class PointController {
         this.resetOptions();
 
         if (mode === Mode.ADDING) {
-
-          const imagesList = Array.from(this._editForm.getElement().querySelectorAll(`.event__photo`));
-          const eventDescription = this._editForm.getElement().querySelector(`.event__destination-description`) ? this._editForm.getElement().querySelector(`.event__destination-description`).textContent : ``;
-          let offersData = this._offersData.filter((it) => it.type === formData.get(`event-type`) ? formData.get(`event-type`).toLowerCase() : document.querySelector(`.event__type-toggle`).value);
-
-          const picturesData = imagesList.map((picture) => ({
-            src: picture.src,
-            description: picture.alt,
-          }));
-
-          this._entry = {
-            'base_price': Number(formData.get(`event-price`)),
-            'date_from': Number(moment(formData.get(`event-start-time`), `DD/MM/YY HH:mm`).format(`x`)),
-            'date_to': Number(moment(formData.get(`event-end-time`), `DD/MM/YY HH:mm`).format(`x`)),
-            'destination': {
-              'name': formData.get(`event-destination`),
-              'pictures': picturesData,
-              'description': eventDescription || ``,
-            },
-            'id': String(this._eventsList.length),
-            'is_favorite': formData.get(`event-favorite`) ? true : false,
-            'offers': offersData[0].offers.map((it) => ({
-              title: it.title,
-              price: it.price,
-              accepted: it.choosen || false,
-            })),
-            'type': formData.get(`event-type`) ? formData.get(`event-type`).toLowerCase() : document.querySelector(`.event__type-toggle`).value,
-          };
-
+          this.setNewEntry(formData);
           onDataChange(ActionType.CREATE, this._data, this._entry);
 
         } else {
@@ -200,8 +158,9 @@ export default class PointController {
       evt.preventDefault();
 
       const load = (isSuccess) => {
+        const ANIMATION_TIMEOUT = 500;
         return new Promise((res, rej) => {
-          setTimeout(isSuccess ? res : rej, 500);
+          setTimeout(isSuccess ? res : rej, ANIMATION_TIMEOUT);
         });
       };
 
@@ -241,12 +200,7 @@ export default class PointController {
     const placeholder = this._editForm.getElement().querySelector(`.event__label`).textContent.trim() || this._editForm.getElement().querySelector(`.event__type-toggle`).value;
     const destination = this._editForm.getElement().querySelector(`.event__input--destination`).value;
 
-    let prep;
-    if (this._data.activity.some((type) => type.toLowerCase() === placeholder)) {
-      prep = ` in `;
-    } else {
-      prep = ` to `;
-    }
+    let prep = this._data.activity.some((type) => type.toLowerCase() === placeholder.toLowerCase()) ? ` in ` : ` to `;
     this._editForm.getElement().querySelector(`.event__label`).textContent = placeholder + prep;
     if (!evt) {
       this._tripEvent.getElement().querySelector(`.event__title`).textContent = placeholder + prep + destination;
@@ -351,14 +305,9 @@ export default class PointController {
 
     if (this._data.options) {
       this._data.options.forEach((offer) => {
-        if (choosenOptions.some((it) => offer.title === it.dataset.offerName)) {
-          offer.choosen = true;
-        } else {
-          offer.choosen = false;
-        }
+        let isOptionChecked = choosenOptions.some((it) => offer.title === it.dataset.offerName);
+        offer.choosen = isOptionChecked;
       });
-    } else {
-      return;
     }
   }
 
@@ -384,6 +333,48 @@ export default class PointController {
     setTimeout(() => {
       this._editForm.getElement().style.animation = ``;
     }, ANIMATION_TIMEOUT);
+  }
+
+  setNewEntry(newData) {
+    const imagesList = Array.from(this._editForm.getElement().querySelectorAll(`.event__photo`));
+    const eventDescription = this._editForm.getElement().querySelector(`.event__destination-description`) ? this._editForm.getElement().querySelector(`.event__destination-description`).textContent : ``;
+    let offersData = this._offersData.filter((it) => it.type === newData.get(`event-type`) ? newData.get(`event-type`).toLowerCase() : document.querySelector(`.event__type-toggle`).value);
+
+    const picturesData = imagesList.map((picture) => ({
+      src: picture.src,
+      description: picture.alt,
+    }));
+    this._entry = {
+      'base_price': Number(newData.get(`event-price`)),
+      'date_from': Number(moment(newData.get(`event-start-time`), `DD/MM/YY HH:mm`).format(`x`)),
+      'date_to': Number(moment(newData.get(`event-end-time`), `DD/MM/YY HH:mm`).format(`x`)),
+      'destination': {
+        'name': newData.get(`event-destination`),
+        'pictures': picturesData,
+        'description': eventDescription || ``,
+      },
+      'id': String(this._eventsList.length),
+      'is_favorite': newData.get(`event-favorite`) ? true : false,
+      'offers': offersData[0].offers.map((it) => ({
+        title: it.title,
+        price: it.price,
+        accepted: it.choosen || false,
+      })),
+      'type': newData.get(`event-type`) ? newData.get(`event-type`).toLowerCase() : document.querySelector(`.event__type-toggle`).value,
+    };
+  }
+
+  setValidity() {
+    let inputs = this._editForm.getElement().querySelectorAll(`.event__input `);
+    for (let i = 0; i < inputs.length; i++) {
+
+      let input = inputs[i];
+      if (!input.checkValidity()) {
+        this.isSomeInputInvalid = true;
+        input.style.borderBottom = `1px solid red`;
+        this._editForm.getElement().style.border = `1px solid red`;
+      }
+    }
   }
 }
 

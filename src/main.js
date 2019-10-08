@@ -4,7 +4,7 @@ import Stat from "../src/components/stat.js";
 import TripController from "../src/controllers/trip-controller.js";
 import TripInfo from "../src/components/trip-info.js";
 import {createRouteInfo} from "../src/components/data.js";
-import {render, Position, unrender} from "../src/utils.js";
+import {render, Position} from "../src/utils.js";
 import {API} from "../src/api.js";
 
 const AUTHORIZATION = `Basic kTy3gI4d517rD`;
@@ -46,11 +46,6 @@ eventsList.then((result) => {
 
 export const onDataChange = (actionType, update, newData) => {
   let tripController;
-
-  if (tripController) {
-    unrender(tripController.getElement());
-    tripController.removeElement();
-  }
 
   switch (actionType) {
     case `create`:

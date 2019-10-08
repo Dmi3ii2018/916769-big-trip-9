@@ -67,7 +67,6 @@ export default class TripController {
 
   _renderDay(tripEvents, callback) {
     unrender(this._tripDaysList.getElement());
-
     this._tripDaysList.removeElement();
     this.Day.removeElement();
     this.dayEventsList.removeElement();

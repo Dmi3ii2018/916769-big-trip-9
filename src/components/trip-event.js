@@ -12,6 +12,7 @@ export default class TripEvent extends AbstractComponent {
   }
 
   getTemplate() {
+    const CHOOSEN_OPTIONS_NUMBER = 3;
     return `<li class="trip-events__item">
       <div class="event">
         <div class="event__type">
@@ -34,7 +35,7 @@ export default class TripEvent extends AbstractComponent {
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-        ${this._options.filter((it) => it.choosen === true).slice(0, 3).map((option) => `<li class="event__offer">
+        ${this._options.filter((it) => it.choosen).slice(0, CHOOSEN_OPTIONS_NUMBER).map((option) => `<li class="event__offer">
         <span class="event__offer-title">${this._options ? option.title : ``}</span>
         ${this._options ? `&plus;&euro;` : ``}
         &nbsp;<span class="event__offer-price">${this._options ? option.price : ``}</span>
