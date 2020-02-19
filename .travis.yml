@@ -5,3 +5,9 @@ node_js:
 
 notifications:
   email: false
+
+deploy:
+  provider: heroku
+  app: "plan-your-big-trip"
+  api_key:
+    secure: "e53d2086-e4d2-40a7-a199-2808440902b5"
