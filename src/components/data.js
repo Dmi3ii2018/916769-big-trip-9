@@ -11,7 +11,9 @@ export function createRouteInfo(eventsList) {
             choosenOptions.push(option.price);
           }
         }));
-        let additionalCost = choosenOptions.reduce((previousValue, currentValue) => previousValue + currentValue);
+        let additionalCost = choosenOptions.reduce((previousValue, currentValue) => {
+          return previousValue + currentValue;
+        }, 0);
         return mainCost + additionalCost;
       },
 

@@ -7,7 +7,7 @@ import {createRouteInfo} from "../src/components/data.js";
 import {render, Position} from "../src/utils.js";
 import {API} from "../src/api.js";
 
-const AUTHORIZATION = `Basic kTy3gI4d517rD`;
+const AUTHORIZATION = `Basic kTy3gI4d517rf`;
 const END_POINT = `https://htmlacademy-es-9.appspot.com/big-trip`;
 
 const api = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
